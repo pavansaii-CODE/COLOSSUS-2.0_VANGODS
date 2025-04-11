@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignLearn - Create Account</title>
+    <link rel="stylesheet" href="/css/sparkles-background.css">
+    <link rel="stylesheet" href="/css/auth.css">
     <style>
         /* Reset and base styles */
         * {
@@ -433,6 +435,7 @@
                 <p class="form-subtitle">Sign up to start your learning journey</p>
 
                 <form id="signupForm">
+                    <div id="error-message" class="form-error hidden">Error message will appear here</div>
                     <div class="form-group">
                         <label for="fullName" class="form-label">Full Name</label>
                         <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
@@ -503,34 +506,34 @@
         const passwordInput = document.getElementById('password');
         const strengthMeter = document.getElementById('strengthMeter');
         const strengthText = document.getElementById('passwordStrengthText');
-        
+
         passwordInput.addEventListener('input', function() {
             const password = this.value;
             let strength = 0;
-            
+
             // Check password length
             if (password.length >= 8) {
                 strength += 1;
             }
-            
+
             // Check for mixed case
             if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
                 strength += 1;
             }
-            
+
             // Check for numbers
             if (password.match(/\d/)) {
                 strength += 1;
             }
-            
+
             // Check for special characters
             if (password.match(/[^a-zA-Z\d]/)) {
                 strength += 1;
             }
-            
+
             // Update strength meter
             strengthMeter.className = 'strength-meter-fill';
-            
+
             if (password.length === 0) {
                 strengthText.textContent = 'Password strength';
                 strengthMeter.classList.add('');
@@ -545,69 +548,69 @@
                 strengthMeter.classList.add('strong');
             }
         });
-        
+
         // Form validation and submission
         document.getElementById('signupForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const termsAgreed = document.getElementById('terms').checked;
-            
+
             // Basic validation
             if (!fullName || !email || !password || !confirmPassword) {
                 alert('Please fill in all required fields');
                 return;
             }
-            
+
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('Please enter a valid email address');
                 return;
             }
-            
+
             // Password match validation
             if (password !== confirmPassword) {
                 alert('Passwords do not match');
                 return;
             }
-            
+
             // Password strength validation
             if (password.length < 8) {
                 alert('Password must be at least 8 characters long');
                 return;
             }
-            
+
             // Terms agreement validation
             if (!termsAgreed) {
                 alert('You must agree to the Terms of Service and Privacy Policy');
                 return;
             }
-            
+
             // Here you would typically send the form data to your server
             console.log('Form submitted:', { fullName, email, password, termsAgreed });
-            
+
             // For demo purposes, show success message
             alert('Account created successfully! You can now sign in.');
-            
+
             // Redirect to login page
             // window.location.href = 'index.html';
         });
-        
+
         // Social signup buttons
         document.querySelector('.github-button').addEventListener('click', function() {
             console.log('GitHub signup clicked');
             // Implement GitHub OAuth signup
         });
-        
+
         document.querySelector('.facebook-button').addEventListener('click', function() {
             console.log('Facebook signup clicked');
             // Implement Facebook OAuth signup
         });
-        
+
         // Login link
         document.querySelector('.login-text').addEventListener('click', function(event) {
             event.preventDefault();
@@ -615,11 +618,101 @@
             // Redirect to login page
             // window.location.href = 'index.html';
         });
-        
+
         // Back to home button
         document.querySelector('.back-button').addEventListener('click', function() {
             console.log('Back to home clicked');
             // Redirect to home page
+        });
+    </script>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth-ui.js"></script>
+    <script src="/js/sparkles-background.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            if (AuthService.isAuthenticated()) {
+                window.location.href = '/';
+                return;
+            }
+
+            const signupForm = document.getElementById('signupForm');
+            const errorMessage = document.getElementById('error-message');
+            const submitButton = document.querySelector('button[type="submit"]');
+
+            // Show error message function
+            function showError(message) {
+                if (errorMessage) {
+                    errorMessage.textContent = message;
+                    errorMessage.classList.remove('hidden');
+                } else {
+                    alert(message);
+                }
+            }
+
+            if (signupForm) {
+                signupForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    // Disable button and show loading state
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.innerHTML = 'Creating account...';
+                    }
+
+                    // Hide previous error
+                    if (errorMessage) {
+                        errorMessage.classList.add('hidden');
+                    }
+
+                    const name = document.getElementById('fullName').value;
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+
+                    // Validate passwords match
+                    if (password !== confirmPassword) {
+                        showError('Passwords do not match');
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = 'Create Account';
+                        }
+                        return;
+                    }
+
+                    try {
+                        const result = await AuthService.register({ name, email, password });
+                        console.log('Registration successful:', result.message);
+                        window.location.href = '/';
+                    } catch (error) {
+                        console.error('Registration error:', error);
+                        showError(error.message || 'Registration failed. Please try again.');
+
+                        // Re-enable button
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = 'Create Account';
+                        }
+                    }
+                });
+            }
+
+            // Login link
+            const loginLink = document.querySelector('.login-text');
+            if (loginLink) {
+                loginLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    window.location.href = '/login-new.html';
+                });
+            }
+
+            // Back to home button
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    window.location.href = '/';
+                });
+            }
         });
     </script>
 </body>

@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fileUpload = require('express-fileupload');
+const jwt = require('jsonwebtoken');
+const { auth } = require('./backend/middleware/auth');
+const protectedRoute = require('./backend/middleware/protected-route');
 
 const authRoutes = require('./backend/routes/auth');
 const userRoutes = require('./backend/routes/user');
@@ -62,6 +65,22 @@ app.get('/sign-recognition', (req, res) => {
 // Redirect old login page to new login page
 app.get('/login.html', (req, res) => {
   res.redirect('/login-new.html');
+});
+
+// Sparkles effect demo page route
+app.get('/sparkles-demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'sparkles-demo.html'));
+});
+
+// Protected routes
+// Dashboard page (requires authentication)
+app.get('/dashboard', protectedRoute, (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dashboard.html'));
+});
+
+// Profile page (requires authentication)
+app.get('/profile', protectedRoute, (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'profile.html'));
 });
 
 // Error handling
