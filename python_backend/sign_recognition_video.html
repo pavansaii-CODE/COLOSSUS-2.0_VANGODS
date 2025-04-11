@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Recognition with Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 1px solid #ccc;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        .video-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ef4444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        .status.recording {
+            display: block;
+            animation: pulse 1.5s infinite;
+        }
+        .result {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Language Recognition with Video</h1>
+        
+        <div class="controls">
+            <button id="startBtn">Start Signing</button>
+            <button id="stopBtn" disabled>Stop Signing</button>
+        </div>
+        
+        <div class="video-container">
+            <img id="videoFeed" class="video-feed" alt="Video feed" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+            <div id="status" class="status">Recording</div>
+            <div id="result" class="result">Your sign will appear here</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const videoFeed = document.getElementById('videoFeed');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        
+        let resultPollingInterval = null;
+        
+        // Start recognition
+        startBtn.addEventListener('click', async () => {
+            try {
+                // Update UI
+                startBtn.disabled = true;
+                stopBtn.disabled = true;
+                status.classList.add('recording');
+                status.textContent = 'Starting...';
+                result.textContent = 'Initializing camera...';
+                
+                // Call API to start recognition
+                const response = await fetch(`${API_BASE_URL}/start_recognition`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                console.log('Start response:', data);
+                
+                if (data.status === 'started' || data.status === 'already_running') {
+                    // Start video feed
+                    videoFeed.src = `${API_BASE_URL}/video_feed?t=${new Date().getTime()}`;
+                    
+                    // Update UI
+                    status.textContent = 'Recording';
+                    result.textContent = 'Analyzing your signs...';
+                    stopBtn.disabled = false;
+                    
+                    // Start polling for results
+                    startResultPolling();
+                } else {
+                    throw new Error('Failed to start recognition');
+                }
+            } catch (error) {
+                console.error('Error starting recognition:', error);
+                // Reset UI on error
+                status.classList.remove('recording');
+                result.textContent = 'Error: ' + error.message;
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+        
+        // Stop recognition
+        stopBtn.addEventListener('click', async () => {
+            try {
+                // Update UI
+                stopBtn.disabled = true;
+                status.textContent = 'Stopping...';
+                
+                // Stop polling for results
+                stopResultPolling();
+                
+                // Call API to stop recognition
+                const response = await fetch(`${API_BASE_URL}/stop_recognition`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                console.log('Stop response:', data);
+                
+                // Reset UI
+                status.classList.remove('recording');
+                result.textContent = 'Your sign will appear here';
+                startBtn.disabled = false;
+                
+                // Reset video feed
+                videoFeed.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+            } catch (error) {
+                console.error('Error stopping recognition:', error);
+                stopBtn.disabled = false;
+            }
+        });
+        
+        // Start polling for results
+        function startResultPolling() {
+            if (resultPollingInterval) {
+                clearInterval(resultPollingInterval);
+            }
+            
+            resultPollingInterval = setInterval(fetchResults, 500);
+        }
+        
+        // Stop polling for results
+        function stopResultPolling() {
+            if (resultPollingInterval) {
+                clearInterval(resultPollingInterval);
+                resultPollingInterval = null;
+            }
+        }
+        
+        // Fetch results from the API
+        async function fetchResults() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/get_results`);
+                const data = await response.json();
+                
+                // Check if we're still recognizing
+                if (!data.is_recognizing) {
+                    // Backend stopped for some reason
+                    stopBtn.click();
+                    return;
+                }
+                
+                // Update UI with latest results
+                if (data.results && data.results.length > 0) {
+                    const latestResult = data.results[data.results.length - 1];
+                    result.textContent = latestResult;
+                }
+            } catch (error) {
+                console.error('Error fetching results:', error);
+            }
+        }
+    </script>
+</body>
+</html>
