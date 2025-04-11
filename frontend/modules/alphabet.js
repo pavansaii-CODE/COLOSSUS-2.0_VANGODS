@@ -6,7 +6,7 @@ const signExamples = [
             "Thumb Placement: Position your thumb so it's resting on the side of your fist."
         ],
         category: "alphabet",
-        image: "" // Add the image URL if available
+        image: "images/img_A.webp" // Add the image URL if available
     },
     {
         alphabet: "B",
@@ -15,7 +15,7 @@ const signExamples = [
             "Thumb Placement: Tuck your thumb across your palm or to the side."
         ],
         category: "alphabet",
-        image: "" // Add the image URL if available
+        image: "images/img_B.jpg" // Add the image URL if available
     },
     {
         alphabet: "C",
@@ -24,7 +24,7 @@ const signExamples = [
             "Thumb Placement: Keep your thumb and fingers creating a semicircle."
         ],
         category: "alphabet",
-        image: "" // Add the image URL if available
+        image: "images/img_c.webp" // Add the image URL if available
     },
     {
         alphabet: "D",
@@ -33,7 +33,7 @@ const signExamples = [
             "Thumb Placement: Position your thumb against the side of your index finger."
         ],
         category: "alphabet",
-        image: "" // Add the image URL if available
+        image: "images/img_D.webp" // Add the image URL if available
     },
     {
         alphabet: "E",
@@ -42,7 +42,7 @@ const signExamples = [
             "Thumb Placement: Position your thumb across your curled fingers."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_e.webp"
     },
     {
         alphabet: "F",
@@ -51,7 +51,7 @@ const signExamples = [
             "Keep the remaining fingers extended and upright."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_f.webp"
     },
     {
         alphabet: "G",
@@ -60,7 +60,7 @@ const signExamples = [
             "Keep the remaining fingers curled."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_g.webp"
     },
     {
         alphabet: "H",
@@ -69,7 +69,7 @@ const signExamples = [
             "Keep the remaining fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_h.webp"
     },
     {
         alphabet: "I",
@@ -77,7 +77,7 @@ const signExamples = [
             "Hand Shape: Raise your pinky finger while curling the other fingers into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_i.webp"
     },
     {
         alphabet: "J",
@@ -86,7 +86,7 @@ const signExamples = [
             "Motion: Draw a J shape in the air with your pinky."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_j.webp"
     },
     {
         alphabet: "K",
@@ -95,7 +95,7 @@ const signExamples = [
             "Thumb Placement: Position your thumb between the index and middle fingers."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_k.webp"
     },
     {
         alphabet: "L",
@@ -104,7 +104,7 @@ const signExamples = [
             "Keep the other fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_l.webp"
     },
     {
         alphabet: "M",
@@ -113,7 +113,7 @@ const signExamples = [
             "Keep your pinky finger extended."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_m.webp"
     },
     {
         alphabet: "N",
@@ -122,7 +122,7 @@ const signExamples = [
             "Keep the remaining fingers extended."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_n.webp"
     },
     {
         alphabet: "O",
@@ -131,7 +131,7 @@ const signExamples = [
             "Keep your thumb and fingers touching to form a circle."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_o.webp"
     },
     {
         alphabet: "P",
@@ -140,7 +140,7 @@ const signExamples = [
             "Positioning: Tilt your hand downward so the P is facing outward."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_p.webp"
     },
     {
         alphabet: "Q",
@@ -149,7 +149,7 @@ const signExamples = [
             "Positioning: Tilt your hand downward so the Q is facing outward."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_q.webp"
     },
     {
         alphabet: "R",
@@ -158,7 +158,7 @@ const signExamples = [
             "Keep the remaining fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_r.webp"
     },
     {
         alphabet: "S",
@@ -166,7 +166,7 @@ const signExamples = [
             "Hand Shape: Form a fist with your thumb resting across your curled fingers."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_s.webp"
     },
     {
         alphabet: "T",
@@ -174,7 +174,7 @@ const signExamples = [
             "Hand Shape: Form a fist with your thumb tucked between your index and middle fingers."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_t.webp"
     },
     {
         alphabet: "U",
@@ -183,7 +183,7 @@ const signExamples = [
             "Keep the remaining fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_u.webp"
     },
     {
         alphabet: "V",
@@ -192,7 +192,7 @@ const signExamples = [
             "Keep the remaining fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_v.webp"
     },
     {
         alphabet: "W",
@@ -201,7 +201,7 @@ const signExamples = [
             "Keep your thumb and pinky curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_w.webp"
     },
     {
         alphabet: "X",
@@ -210,7 +210,7 @@ const signExamples = [
             "Keep the other fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_x.webp"
     },
     {
         alphabet: "Y",
@@ -219,7 +219,7 @@ const signExamples = [
             "Keep the other fingers curled into your palm."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_y.webp"
     },
     {
         alphabet: "Z",
@@ -228,7 +228,7 @@ const signExamples = [
             "Motion: Draw a Z shape in the air with your extended finger."
         ],
         category: "alphabet",
-        image: ""
+        image: "images/img_z.webp"
     }
 ];
 
