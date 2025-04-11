@@ -35,12 +35,28 @@ app.use('/api/users', userRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/results', resultRoutes);
 
+// Define routes first (before static files)
+// Default route -> home page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'home.html'));
+});
+
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Default route -> login page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'login-new.html'));
+// Home page route
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'home.html'));
+});
+
+// Dashboard route (protected page after login)
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
+// Sign recognition page route
+app.get('/sign-recognition', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'sign_recognition.html'));
 });
 
 // Redirect old login page to new login page

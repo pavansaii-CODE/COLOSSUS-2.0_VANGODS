@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignLearn - Interactive Sign Language Learning Platform</title>
+  <meta name="description" content="Learn sign language through immersive 3D lessons, real-time practice, and interactive quizzes.">
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+          <path d="m1 5 2-2m-2 2 2 2"/>
+          <path d="M5 1 3 3m2-2L3 3"/>
+          <path d="m17 5 2-2m-2 2 2 2"/>
+          <path d="M21 1 19 3m2-2-2 2"/>
+          <path d="M9 11v6"/>
+          <path d="M9 17h6"/>
+          <path d="M11 11h4"/>
+          <path d="M11 14h4"/>
+          <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+          <path d="M3 10v4"/>
+          <path d="M21 10v4"/>
+        </svg>
+        <span class="logo-text">SignLearn</span>
+      </div>
+      <div class="nav-links">
+        <a href="home.html" class="nav-link active">Home</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login-new.html" class="btn btn-outline">Sign In</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        <button class="sidebar-trigger" id="sidebarTrigger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <line x1="9" x2="9" y1="3" y2="21"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">Learn Sign Language Interactively</h1>
+        <p class="hero-description">Master sign language through our immersive 3D lessons, real-time practice with AI feedback, and interactive quizzes.</p>
+        <div class="hero-actions">
+          <a href="signup.html" class="btn btn-primary btn-lg">Get Started</a>
+          <a href="#features" class="btn btn-outline btn-lg">Learn More</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="/images/hero-image.png" alt="Person using sign language" class="hero-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose SignLearn?</h2>
+        <p class="section-description">Our platform offers unique features designed to make learning sign language engaging and effective.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Comprehensive Curriculum</h3>
+          <p class="feature-description">Our structured learning path takes you from beginner to advanced with carefully designed modules.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Interactive 3D Models</h3>
+          <p class="feature-description">Learn with detailed 3D hand models that you can rotate and examine from any angle.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 8a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-8z"/>
+              <path d="M4 6v12"/>
+              <path d="M20 12H4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Real-time Practice</h3>
+          <p class="feature-description">Practice your signs with our AI-powered recognition system that provides instant feedback.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" x2="9.01" y1="9" y2="9"/>
+              <line x1="15" x2="15.01" y1="9" y2="9"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Progress Tracking</h3>
+          <p class="feature-description">Track your learning journey with detailed progress reports and achievement badges.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">About SignLearn</h2>
+        <p class="section-description">Our mission is to make sign language learning accessible to everyone.</p>
+      </div>
+      <div class="about-content">
+        <div class="about-image">
+          <img src="/images/about-image.png" alt="SignLearn team" class="about-img">
+        </div>
+        <div class="about-text">
+          <p>SignLearn was founded with a simple goal: to break down communication barriers between the hearing and deaf communities. Our team of linguists, educators, and technology experts have created a platform that makes learning sign language engaging, effective, and accessible.</p>
+          <p>We believe that language should never be a barrier to connection and understanding. By empowering more people to learn sign language, we're working toward a more inclusive world where everyone can communicate freely.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="section-description">Have questions or feedback? We'd love to hear from you.</p>
+      </div>
+      <div class="contact-form-container">
+        <form class="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+            <path d="m1 5 2-2m-2 2 2 2"/>
+            <path d="M5 1 3 3m2-2L3 3"/>
+            <path d="m17 5 2-2m-2 2 2 2"/>
+            <path d="M21 1 19 3m2-2-2 2"/>
+            <path d="M9 11v6"/>
+            <path d="M9 17h6"/>
+            <path d="M11 11h4"/>
+            <path d="M11 14h4"/>
+            <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+            <path d="M3 10v4"/>
+            <path d="M21 10v4"/>
+          </svg>
+          <span class="logo-text">SignLearn</span>
+        </div>
+        <div class="footer-links">
+          <div class="footer-links-column">
+            <h3 class="footer-links-title">Platform</h3>
+            <a href="#" class="footer-link">Features</a>
+            <a href="#" class="footer-link">Pricing</a>
+            <a href="#" class="footer-link">FAQ</a>
+          </div>
+          <div class="footer-links-column">
+            <h3 class="footer-links-title">Company</h3>
+            <a href="#" class="footer-link">About Us</a>
+            <a href="#" class="footer-link">Careers</a>
+            <a href="#" class="footer-link">Blog</a>
+          </div>
+          <div class="footer-links-column">
+            <h3 class="footer-links-title">Legal</h3>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© 2023 SignLearn. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+          <path d="m1 5 2-2m-2 2 2 2"/>
+          <path d="M5 1 3 3m2-2L3 3"/>
+          <path d="m17 5 2-2m-2 2 2 2"/>
+          <path d="M21 1 19 3m2-2-2 2"/>
+          <path d="M9 11v6"/>
+          <path d="M9 17h6"/>
+          <path d="M11 11h4"/>
+          <path d="M11 14h4"/>
+          <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+          <path d="M3 10v4"/>
+          <path d="M21 10v4"/>
+        </svg>
+        <span class="logo-text">SignLearn</span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <div class="sidebar-links">
+        <a href="home.html" class="sidebar-link active">Home</a>
+        <a href="#features" class="sidebar-link">Features</a>
+        <a href="#about" class="sidebar-link">About</a>
+        <a href="#contact" class="sidebar-link">Contact</a>
+      </div>
+      <div class="sidebar-actions">
+        <a href="login-new.html" class="btn btn-outline btn-block">Sign In</a>
+        <a href="signup.html" class="btn btn-primary btn-block">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/home.js"></script>
+</body>
+</html>

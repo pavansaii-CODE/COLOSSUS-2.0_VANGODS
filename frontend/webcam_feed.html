@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Feed</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+        #videoFeed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 10;
+            display: none; /* Initially hidden */
+        }
+        .status.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="recordingStatus">Camera Active</div>
+    <img id="videoFeed" alt="Video feed">
+
+    <script>
+        // Use a more efficient approach to load the video feed
+        window.onload = function() {
+            const videoFeed = document.getElementById('videoFeed');
+            const statusIndicator = document.getElementById('recordingStatus');
+
+            // Add timestamp to prevent caching
+            const timestamp = new Date().getTime();
+            videoFeed.src = `http://localhost:5001/api/video_feed?t=${timestamp}`;
+
+            // Show status when loaded
+            videoFeed.onload = function() {
+                statusIndicator.classList.add('active');
+                // Send a message to the parent window that the camera is ready
+                try {
+                    window.parent.postMessage('camera-ready', '*');
+                } catch (e) {
+                    console.error('Could not send message to parent:', e);
+                }
+            };
+
+            // Handle errors
+            videoFeed.onerror = function() {
+                console.error('Failed to load video feed');
+                document.body.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Failed to load camera feed. Please refresh the page or check your camera permissions.</div>';
+                // Send error message to parent
+                try {
+                    window.parent.postMessage('camera-error', '*');
+                } catch (e) {
+                    console.error('Could not send error message to parent:', e);
+                }
+            };
+
+            // Listen for unload event to clean up
+            window.addEventListener('beforeunload', function() {
+                // Clean up resources
+                videoFeed.src = '';
+                videoFeed.onload = null;
+                videoFeed.onerror = null;
+            });
+        };
+    </script>
+</body>
+</html>

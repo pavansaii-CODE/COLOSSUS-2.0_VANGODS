@@ -10,6 +10,14 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+  <script src="/js/sign-recognition-stream.js" defer></script>
+  <script>
+    // Test script to verify JavaScript is working
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM fully loaded');
+      console.log('Start Signing button direct check:', document.getElementById('startSigningBtn'));
+    });
+  </script>
 </head>
 <body>
   <!-- Navigation -->
@@ -36,12 +44,10 @@
         <a href="#" class="nav-link">Classes</a>
         <a href="#" class="nav-link">Modules</a>
         <a href="#" class="nav-link">Quizzes</a>
-        <a href="#" class="nav-link">Notes</a>
         <a href="#" class="nav-link">Dashboard</a>
       </div>
       <div class="nav-actions">
-        <a href="login-new.html" class="btn btn-outline">Sign In</a>
-        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        <a href="home.html" class="btn btn-primary">Logout</a>
         <button class="sidebar-trigger" id="sidebarTrigger">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
@@ -122,15 +128,7 @@
                 <span>Quizzes</span>
               </a>
             </li>
-            <li class="sidebar-menu-item">
-              <a href="#" class="sidebar-menu-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-                  <line x1="9" x2="9" y1="3" y2="21"/>
-                </svg>
-                <span>Notes</span>
-              </a>
-            </li>
+
             <li class="sidebar-menu-item">
               <a href="#" class="sidebar-menu-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
@@ -590,11 +588,12 @@
           <div class="card">
             <div class="card-content">
               <div class="conversion-video">
+
                 <div id="conversionStatus" class="conversion-status"></div>
                 <div class="conversion-placeholder" id="conversionPlaceholder">
                   <p id="conversionResult">Your camera feed will appear here</p>
-                  <button class="btn btn-primary" id="startSigningBtn">Start Signing</button>
                 </div>
+                <button class="btn btn-primary" id="startSigningBtn">Start Signing</button>
               </div>
               <div class="conversion-info">
                 <h3>How it works:</h3>
@@ -681,7 +680,7 @@
             <li><a href="#" class="footer-link">Classes</a></li>
             <li><a href="#" class="footer-link">Modules</a></li>
             <li><a href="#" class="footer-link">Quizzes</a></li>
-            <li><a href="#" class="footer-link">Notes</a></li>
+
             <li><a href="#" class="footer-link">Dashboard</a></li>
           </ul>
         </div>

@@ -39,37 +39,7 @@ tabTriggers.forEach((trigger) => {
   })
 })
 
-// Conversion demo functionality
-let isRecording = false
-
-startSigningBtn.addEventListener("click", () => {
-  if (!isRecording) {
-    // Start recording
-    isRecording = true
-    conversionStatus.textContent = "Recording"
-    conversionStatus.classList.add("recording")
-    conversionResult.textContent = "Analyzing your signs..."
-    startSigningBtn.style.display = "none"
-
-    // Simulate processing
-    setTimeout(() => {
-      // Stop recording
-      isRecording = false
-      conversionStatus.classList.remove("recording")
-      conversionResult.textContent = "Hello, how are you today?"
-
-      // Show try again button
-      startSigningBtn.textContent = "Try Again"
-      startSigningBtn.style.display = "block"
-    }, 3000)
-  } else {
-    // Reset
-    isRecording = false
-    conversionStatus.classList.remove("recording")
-    conversionResult.textContent = "Your camera feed will appear here"
-    startSigningBtn.textContent = "Start Signing"
-  }
-})
+// Conversion demo functionality is now handled by sign-recognition.js
 
 // Animation on scroll
 document.addEventListener("DOMContentLoaded", () => {

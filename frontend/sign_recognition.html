@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Language Recognition</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background-color: #4361ee;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+      color: var(--accent-color);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    .video-section {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .video-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .video-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .video-container {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    #videoFeed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .video-stats {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+
+    .stat-item {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .recognition-bar {
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .recognition-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .controls-section {
+      display: flex;
+      justify-content: center;
+      padding: 1.5rem;
+      gap: 1rem;
+      background-color: #f8f9fa;
+      border-top: 1px solid #eee;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #d10a6c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .result-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    #recognitionResult {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      background-color: #f8f9fa;
+      margin-bottom: 1rem;
+      transition: var(--transition);
+    }
+
+    .history-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem;
+      border-bottom: 1px solid #eee;
+      transition: var(--transition);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .history-sign {
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    .history-time {
+      color: var(--gray-color);
+      font-size: 0.9rem;
+    }
+
+    .status {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--danger-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: pulse 1.5s infinite;
+      z-index: 100;
+      display: none;
+    }
+
+    .status.active {
+      display: flex;
+    }
+
+    .status i {
+      font-size: 1rem;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      z-index: 100;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .stats-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+
+    .stat-card {
+      background-color: #f8f9fa;
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--gray-color);
+    }
+
+    .confidence-meter {
+      height: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+
+    .confidence-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .footer-text {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 992px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+
+      .logo {
+        justify-content: center;
+      }
+
+      .controls-section {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-american-sign-language-interpreting"></i>
+          <h1>Advanced Sign Language Recognition</h1>
+        </div>
+        <div class="header-stats">
+          <span id="sessionTime" class="stat-item"><i class="far fa-clock"></i> Session: 00:00</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="video-section fade-in">
+        <div class="video-header">
+          <div class="video-title">
+            <i class="fas fa-video"></i>
+            <span>Live Recognition Feed</span>
+          </div>
+          <div class="tooltip">
+            <i class="fas fa-info-circle"></i>
+            <span class="tooltip-text">Make hand gestures in front of the camera</span>
+          </div>
+        </div>
+
+        <div class="video-container">
+          <div class="status" id="recordingStatus">
+            <i class="fas fa-circle-notch fa-spin"></i>
+            <span>Recording</span>
+          </div>
+          <div class="loading" id="loadingIndicator">
+            <div class="loading-spinner"></div>
+          </div>
+          <img id="videoFeed" alt="Video feed">
+
+          <div class="video-overlay">
+            <div class="video-stats">
+              <div class="stat-item" id="fpsCounter">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>0 FPS</span>
+              </div>
+              <div class="stat-item" id="handStatus">
+                <i class="fas fa-hand-paper"></i>
+                <span>No Hand</span>
+              </div>
+            </div>
+
+            <div class="recognition-bar">
+              <div class="recognition-text" id="overlayResult">Waiting for signs...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-section">
+          <button id="startBtn" class="btn btn-primary">
+            <i class="fas fa-play"></i>
+            <span>Start Recognition</span>
+          </button>
+          <button id="stopBtn" class="btn btn-danger" disabled>
+            <i class="fas fa-stop"></i>
+            <span>Stop Recognition</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="info-section">
+        <div class="result-card fade-in">
+          <div class="card-header">
+            <i class="fas fa-hand-point-up"></i>
+            <span>Recognition Result</span>
+          </div>
+          <div class="card-body">
+            <div id="recognitionResult">Waiting for signs...</div>
+            <div class="confidence-meter">
+              <div class="confidence-bar" id="confidenceBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-card fade-in">
+          <div class="card-header">
+            <i class="fas fa-chart-bar"></i>
+            <span>Recognition Statistics</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="totalSigns">0</div>
+              <div class="stat-label">Signs Recognized</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="accuracy">0%</div>
+              <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="responseTime">0ms</div>
+              <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="uniqueSigns">0</div>
+              <div class="stat-label">Unique Signs</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-card fade-in">
+          <div class="card-header">
+            <i class="fas fa-history"></i>
+            <span>Recent Signs</span>
+          </div>
+          <div class="card-body">
+            <ul class="history-list" id="historyList">
+              <!-- History items will be added here dynamically -->
+              <li class="history-item">
+                <span class="history-sign">No signs yet</span>
+                <span class="history-time">-</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <p class="footer-text">© 2023 Advanced Sign Language Recognition System | Developed with ❤️ for Accessibility</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // API endpoint
+    const API_BASE_URL = 'http://localhost:5001/api';
+
+    // DOM Elements
+    const videoFeed = document.getElementById('videoFeed');
+    const recordingStatus = document.getElementById('recordingStatus');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const recognitionResult = document.getElementById('recognitionResult');
+    const overlayResult = document.getElementById('overlayResult');
+    const confidenceBar = document.getElementById('confidenceBar');
+    const fpsCounter = document.getElementById('fpsCounter');
+    const handStatus = document.getElementById('handStatus');
+    const sessionTime = document.getElementById('sessionTime');
+    const totalSigns = document.getElementById('totalSigns');
+    const accuracy = document.getElementById('accuracy');
+    const responseTime = document.getElementById('responseTime');
+    const uniqueSigns = document.getElementById('uniqueSigns');
+    const historyList = document.getElementById('historyList');
+
+    // State variables
+    let isRecognizing = false;
+    let resultPollingInterval = null;
+    let fpsInterval = null;
+    let sessionInterval = null;
+    let sessionStartTime = null;
+    let lastFrameTime = 0;
+    let frameCount = 0;
+    let lastResult = null;
+    let resultCooldown = 0;
+    let recognizedSigns = [];
+    let uniqueSignsSet = new Set();
+    let lastResponseTime = 0;
+    let confidenceLevel = 0;
+    let handDetected = false;
+
+    // Performance monitoring
+    let frameTimestamps = [];
+    const MAX_TIMESTAMPS = 30; // For calculating FPS
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up event listeners
+      startBtn.addEventListener('click', startRecognition);
+      stopBtn.addEventListener('click', stopRecognition);
+
+      // Initialize history list
+      clearHistoryList();
+
+      // Handle page unload to clean up resources
+      window.addEventListener('beforeunload', function() {
+        if (isRecognizing) {
+          // Make a synchronous request to stop recognition
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', `${API_BASE_URL}/stop_recognition`, false);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send();
+
+          // Also release camera resources
+          const cameraXhr = new XMLHttpRequest();
+          cameraXhr.open('POST', `${API_BASE_URL}/disable_camera`, false);
+          cameraXhr.setRequestHeader('Content-Type', 'application/json');
+          cameraXhr.send();
+        }
+      });
+
+      // Add video feed event handlers
+      videoFeed.onload = function() {
+        loadingIndicator.style.display = 'none';
+        console.log('Video feed loaded successfully');
+      };
+
+      videoFeed.onerror = function() {
+        loadingIndicator.style.display = 'none';
+        recognitionResult.textContent = 'Error loading video feed';
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        console.error('Failed to load video feed');
+      };
+    });
+    // Core functions for sign recognition
+    async function startRecognition() {
+      try {
+        // Update UI
+        startBtn.disabled = true;
+        stopBtn.disabled = true;
+        loadingIndicator.style.display = 'block';
+        recognitionResult.textContent = 'Initializing...';
+        overlayResult.textContent = 'Initializing...';
+
+        // Reset statistics
+        resetStats();
+
+        // Start session timer
+        sessionStartTime = new Date();
+        startSessionTimer();
+
+        // Call API to start recognition
+        const response = await fetch(`${API_BASE_URL}/start_recognition`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'started' || data.status === 'already_running') {
+          // Start video feed with cache-busting and reduced quality for better performance
+          const timestamp = new Date().getTime();
+          videoFeed.src = `${API_BASE_URL}/video_feed?t=${timestamp}&quality=85&width=640&height=480`;
+
+          // Update UI
+          isRecognizing = true;
+          loadingIndicator.style.display = 'none';
+          recordingStatus.classList.add('active');
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          recognitionResult.textContent = 'Waiting for signs...';
+          overlayResult.textContent = 'Waiting for signs...';
+
+          // Reset state
+          lastResult = null;
+          resultCooldown = 0;
+
+          // Start monitoring FPS
+          startFpsMonitoring();
+
+          // Start polling for results
+          startResultPolling();
+        } else {
+          throw new Error('Failed to start recognition');
+        }
+      } catch (error) {
+        console.error('Error starting recognition:', error);
+        loadingIndicator.style.display = 'none';
+        startBtn.disabled = false;
+        recognitionResult.textContent = 'Error starting recognition. Please try again.';
+        overlayResult.textContent = 'Error starting recognition';
+      }
+    }
+
+    async function stopRecognition() {
+      try {
+        // Update UI
+        stopBtn.disabled = true;
+        loadingIndicator.style.display = 'block';
+
+        // Stop polling and monitoring
+        stopResultPolling();
+        stopFpsMonitoring();
+        stopSessionTimer();
+
+        // Call API to stop recognition
+        const response = await fetch(`${API_BASE_URL}/stop_recognition`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // Clear video feed
+        videoFeed.src = '';
+
+        // Update UI
+        isRecognizing = false;
+        loadingIndicator.style.display = 'none';
+        recordingStatus.classList.remove('active');
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        recognitionResult.textContent = 'Recognition stopped';
+        overlayResult.textContent = 'Recognition stopped';
+        handStatus.innerHTML = '<i class="fas fa-hand-paper"></i><span>No Hand</span>';
+
+        // Call API to release camera resources
+        await fetch(`${API_BASE_URL}/disable_camera`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (error) {
+        console.error('Error stopping recognition:', error);
+        loadingIndicator.style.display = 'none';
+        startBtn.disabled = false;
+        stopBtn.disabled = false;
+      }
+    }
+
+    // Result polling functions
+    function startResultPolling() {
+      // Clear any existing interval
+      stopResultPolling();
+
+      // Poll for results every 200ms for better responsiveness
+      resultPollingInterval = setInterval(fetchResults, 200);
+
+      // Fetch results immediately
+      fetchResults();
+    }
+
+    function stopResultPolling() {
+      if (resultPollingInterval) {
+        clearInterval(resultPollingInterval);
+        resultPollingInterval = null;
+      }
+    }
+
+    // FPS monitoring functions
+    function startFpsMonitoring() {
+      // Reset frame data
+      frameTimestamps = [];
+      frameCount = 0;
+      lastFrameTime = performance.now();
+
+      // Update FPS every second
+      fpsInterval = setInterval(updateFps, 1000);
+    }
+
+    function stopFpsMonitoring() {
+      if (fpsInterval) {
+        clearInterval(fpsInterval);
+        fpsInterval = null;
+      }
+    }
+
+    function updateFps() {
+      const now = performance.now();
+      const elapsedSec = (now - lastFrameTime) / 1000;
+      const fps = Math.round(frameCount / elapsedSec);
+
+      fpsCounter.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>${fps} FPS</span>`;
+
+      // Reset for next update
+      frameCount = 0;
+      lastFrameTime = now;
+    }
+
+    // Session timer functions
+    function startSessionTimer() {
+      sessionInterval = setInterval(updateSessionTime, 1000);
+      updateSessionTime(); // Update immediately
+    }
+
+    function stopSessionTimer() {
+      if (sessionInterval) {
+        clearInterval(sessionInterval);
+        sessionInterval = null;
+      }
+    }
+
+    function updateSessionTime() {
+      if (!sessionStartTime) return;
+
+      const now = new Date();
+      const elapsedMs = now - sessionStartTime;
+      const seconds = Math.floor((elapsedMs / 1000) % 60);
+      const minutes = Math.floor((elapsedMs / (1000 * 60)) % 60);
+
+      const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      sessionTime.innerHTML = `<i class="far fa-clock"></i> Session: ${formattedTime}`;
+    }
+
+    // Fetch results from the API
+    async function fetchResults() {
+      try {
+        // Record start time for response time calculation
+        const fetchStartTime = performance.now();
+
+        const response = await fetch(`${API_BASE_URL}/get_results`);
+        const data = await response.json();
+
+        // Calculate response time
+        const responseTimeMs = Math.round(performance.now() - fetchStartTime);
+        lastResponseTime = responseTimeMs;
+        responseTime.textContent = `${responseTimeMs}ms`;
+
+        // Increment frame counter for FPS calculation
+        frameCount++;
+
+        // Check if we're still recognizing
+        if (!data.is_recognizing) {
+          if (isRecognizing) {
+            stopRecognition();
+          }
+          return;
+        }
+
+        // Update hand detection status
+        if (data.hand_detected !== undefined) {
+          handDetected = data.hand_detected;
+          updateHandStatus(handDetected);
+        }
+
+        // Update UI with the latest results
+        if (data.results && data.results.length > 0) {
+          // Get the most recent result
+          const latestResult = data.results[data.results.length - 1];
+
+          // Get confidence if available
+          if (data.confidence !== undefined) {
+            confidenceLevel = data.confidence;
+            updateConfidenceBar(confidenceLevel);
+          } else {
+            // If no confidence provided, use a random value for demo
+            updateConfidenceBar(Math.random() * 0.5 + 0.5);
+          }
+
+          // Only update if the result has changed and cooldown is over
+          if (latestResult !== lastResult && resultCooldown <= 0) {
+            // Update the result displays with animation
+            recognitionResult.innerHTML = latestResult;
+            recognitionResult.style.animation = 'pulse 1s';
+
+            overlayResult.textContent = latestResult;
+
+            // Remove animation after it completes
+            setTimeout(() => {
+              recognitionResult.style.animation = '';
+            }, 1000);
+
+            // Add to history
+            addToHistory(latestResult);
+
+            // Update statistics
+            updateStats(latestResult);
+
+            // Update last result and set cooldown
+            lastResult = latestResult;
+            resultCooldown = 5; // Skip a few frames before accepting a new result
+
+            console.log('Recognized sign:', latestResult);
+          } else if (resultCooldown > 0) {
+            resultCooldown--;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching results:', error);
+      }
+    }
+
+    // Helper functions
+    function updateHandStatus(detected) {
+      if (detected) {
+        handStatus.innerHTML = '<i class="fas fa-hand-paper" style="color: #4CAF50;"></i><span>Hand Detected</span>';
+      } else {
+        handStatus.innerHTML = '<i class="fas fa-hand-paper"></i><span>No Hand</span>';
+      }
+    }
+
+    function updateConfidenceBar(confidence) {
+      // Ensure confidence is between 0 and 1
+      const normalizedConfidence = Math.min(Math.max(confidence, 0), 1);
+      const percentage = Math.round(normalizedConfidence * 100);
+
+      // Update the confidence bar width
+      confidenceBar.style.width = `${percentage}%`;
+
+      // Update accuracy display
+      accuracy.textContent = `${percentage}%`;
+    }
+
+    function addToHistory(sign) {
+      // Create timestamp
+      const now = new Date();
+      const timeString = now.toLocaleTimeString();
+
+      // Create new history item
+      const historyItem = document.createElement('li');
+      historyItem.className = 'history-item';
+      historyItem.innerHTML = `
+        <span class="history-sign">${sign}</span>
+        <span class="history-time">${timeString}</span>
+      `;
+
+      // Add to the beginning of the list
+      if (historyList.firstChild && historyList.firstChild.textContent.includes('No signs yet')) {
+        historyList.innerHTML = ''; // Clear the "No signs yet" message
+      }
+
+      historyList.insertBefore(historyItem, historyList.firstChild);
+
+      // Limit history to 10 items
+      while (historyList.children.length > 10) {
+        historyList.removeChild(historyList.lastChild);
+      }
+    }
+
+    function clearHistoryList() {
+      historyList.innerHTML = `
+        <li class="history-item">
+          <span class="history-sign">No signs yet</span>
+          <span class="history-time">-</span>
+        </li>
+      `;
+    }
+
+    function updateStats(sign) {
+      // Add to recognized signs array
+      recognizedSigns.push(sign);
+
+      // Update unique signs set
+      uniqueSignsSet.add(sign);
+
+      // Update UI
+      totalSigns.textContent = recognizedSigns.length;
+      uniqueSigns.textContent = uniqueSignsSet.size;
+    }
+
+    function resetStats() {
+      recognizedSigns = [];
+      uniqueSignsSet = new Set();
+      totalSigns.textContent = '0';
+      uniqueSigns.textContent = '0';
+      accuracy.textContent = '0%';
+      responseTime.textContent = '0ms';
+      confidenceBar.style.width = '0%';
+      clearHistoryList();
+    }
+  </script>
+</body>
+</html>
+        loadingIndicator.style.display = 'block';
+        recognitionResult.textContent = 'Initializing...';
+
+        // Call API to start recognition
+        const response = await fetch(`${API_BASE_URL}/start_recognition`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'started' || data.status === 'already_running') {
+          // Start video feed with cache-busting and reduced quality for better performance
+          const timestamp = new Date().getTime();
+          videoFeed.src = `${API_BASE_URL}/video_feed?t=${timestamp}&quality=80&width=640&height=480`;
+
+          // Update UI
+          isRecognizing = true;
+          loadingIndicator.style.display = 'none';
+          recordingStatus.classList.add('active');
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          recognitionResult.textContent = 'Waiting for signs...';
+
+          // Reset state
+          lastResult = null;
+          resultCooldown = 0;
+
+          // Start polling for results
+          startResultPolling();
+        } else {
+          throw new Error('Failed to start recognition');
+        }
+      } catch (error) {
+        console.error('Error starting recognition:', error);
+        loadingIndicator.style.display = 'none';
+        startBtn.disabled = false;
+        recognitionResult.textContent = 'Error starting recognition. Please try again.';
+      }
+    }
+
+    // Stop recognition
+    async function stopRecognition() {
+      try {
+        // Update UI
+        stopBtn.disabled = true;
+        loadingIndicator.style.display = 'block';
+
+        // Stop polling
+        stopResultPolling();
+
+        // Call API to stop recognition
+        const response = await fetch(`${API_BASE_URL}/stop_recognition`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // Clear video feed
+        videoFeed.src = '';
+
+        // Update UI
+        isRecognizing = false;
+        loadingIndicator.style.display = 'none';
+        recordingStatus.classList.remove('active');
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        recognitionResult.textContent = 'Recognition stopped';
+
+        // Call API to release camera resources
+        await fetch(`${API_BASE_URL}/disable_camera`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      } catch (error) {
+        console.error('Error stopping recognition:', error);
+        loadingIndicator.style.display = 'none';
+        startBtn.disabled = false;
+        stopBtn.disabled = false;
+      }
+    }
+
+    // Start polling for results
+    function startResultPolling() {
+      // Clear any existing interval
+      stopResultPolling();
+
+      // Poll for results every 200ms for better responsiveness
+      resultPollingInterval = setInterval(fetchResults, 200);
+
+      // Fetch results immediately
+      fetchResults();
+    }
+
+    // Stop polling for results
+    function stopResultPolling() {
+      if (resultPollingInterval) {
+        clearInterval(resultPollingInterval);
+        resultPollingInterval = null;
+      }
+    }
+
+    // Fetch results from the API
+    async function fetchResults() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/get_results`);
+        const data = await response.json();
+
+        // Check if we're still recognizing
+        if (!data.is_recognizing) {
+          if (isRecognizing) {
+            stopRecognition();
+          }
+          return;
+        }
+
+        // Update UI with the latest results
+        if (data.results && data.results.length > 0) {
+          // Get the most recent result
+          const latestResult = data.results[data.results.length - 1];
+
+          // Only update if the result has changed and cooldown is over
+          if (latestResult !== lastResult && resultCooldown <= 0) {
+            // Update the result display with animation
+            recognitionResult.innerHTML = `<span style="color: #4CAF50;">Recognized Sign:</span> ${latestResult}`;
+            recognitionResult.style.animation = 'pulse 1s';
+
+            // Remove animation after it completes
+            setTimeout(() => {
+              recognitionResult.style.animation = '';
+            }, 1000);
+
+            // Update last result and set cooldown
+            lastResult = latestResult;
+            resultCooldown = 5; // Skip a few frames before accepting a new result
+
+            console.log('Recognized sign:', latestResult);
+          } else if (resultCooldown > 0) {
+            resultCooldown--;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching results:', error);
+      }
+    }
+
+    // Handle video feed loading
+    videoFeed.onload = function() {
+      loadingIndicator.style.display = 'none';
+      console.log('Video feed loaded successfully');
+    };
+
+    videoFeed.onerror = function() {
+      loadingIndicator.style.display = 'none';
+      recognitionResult.textContent = 'Error loading video feed. Please try again.';
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      console.error('Failed to load video feed');
+    };
+  </script>
+</body>
+</html>
