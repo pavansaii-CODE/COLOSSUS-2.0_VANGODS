@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SignLearn</title>
+  <meta name="description" content="Sign in to your SignLearn account to continue your sign language learning journey.">
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Login specific styles */
+    .login-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .login-image {
+      flex: 1;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1531951634065-9a60d82bf3d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: white;
+      position: relative;
+      display: none;
+    }
+
+    @media (min-width: 992px) {
+      .login-image {
+        display: flex;
+      }
+    }
+
+    .login-image-content {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .login-image-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .login-image-subtitle {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .login-form-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-color: var(--bg-primary);
+    }
+
+    .login-form-wrapper {
+      width: 100%;
+      max-width: 450px;
+      padding: 2.5rem;
+      background-color: var(--bg-secondary);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-form-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .login-form-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-group input {
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--bg-input);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+      outline: none;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .remember-me input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--color-primary);
+    }
+
+    .remember-me label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .forgot-password {
+      font-size: 0.875rem;
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .login-button {
+      margin-top: 1rem;
+      padding: 0.875rem;
+      border-radius: 8px;
+      background-color: var(--color-primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .login-button:hover {
+      background-color: var(--color-primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+
+    .login-divider span {
+      padding: 0 1rem;
+      font-size: 0.875rem;
+    }
+
+    .social-login {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-login-button {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .social-login-button:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .login-footer a {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .form-error-message {
+      color: var(--color-error);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-group.error input {
+      border-color: var(--color-error);
+    }
+
+    .form-group.error .form-error-message {
+      display: block;
+    }
+
+    .back-to-home {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1rem;
+      background-color: var(--bg-tertiary);
+      border-radius: 30px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-to-home:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .testimonial {
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .testimonial-author-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .testimonial-author-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .testimonial-author-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .testimonial-author-role {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Left side - Image and testimonials -->
+    <div class="login-image">
+      <div class="login-image-content">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+            <path d="m1 5 2-2m-2 2 2 2"/>
+            <path d="M5 1 3 3m2-2L3 3"/>
+            <path d="m17 5 2-2m-2 2 2 2"/>
+            <path d="M21 1 19 3m2-2-2 2"/>
+            <path d="M9 11v6"/>
+            <path d="M9 17h6"/>
+            <path d="M11 11h4"/>
+            <path d="M11 14h4"/>
+            <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+            <path d="M3 10v4"/>
+            <path d="M21 10v4"/>
+          </svg>
+          <span class="logo-text">SignLearn</span>
+        </div>
+        <h1 class="login-image-title">Welcome Back</h1>
+        <p class="login-image-subtitle">Sign in to continue your learning journey and access all your courses and progress.</p>
+
+        <div class="testimonial">
+          <p class="testimonial-text">"SignLearn has completely transformed how I communicate with my deaf colleagues. The interactive lessons and real-time feedback made learning sign language both fun and effective."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-author-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="testimonial-author-name">Michael Chen</div>
+              <div class="testimonial-author-role">Software Engineer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side - Login form -->
+    <div class="login-form-container">
+      <a href="index.html" class="back-to-home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        <span>Back to Home</span>
+      </a>
+
+      <div class="login-form-wrapper">
+        <div class="login-form-header">
+          <div class="logo" style="justify-content: center; margin-bottom: 1.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+              <path d="m1 5 2-2m-2 2 2 2"/>
+              <path d="M5 1 3 3m2-2L3 3"/>
+              <path d="m17 5 2-2m-2 2 2 2"/>
+              <path d="M21 1 19 3m2-2-2 2"/>
+              <path d="M9 11v6"/>
+              <path d="M9 17h6"/>
+              <path d="M11 11h4"/>
+              <path d="M11 14h4"/>
+              <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+              <path d="M3 10v4"/>
+              <path d="M21 10v4"/>
+            </svg>
+            <span class="logo-text">SignLearn</span>
+          </div>
+          <h1 class="login-form-title">Welcome Back</h1>
+          <p class="login-form-subtitle">Sign in to your account to continue</p>
+        </div>
+
+        <form class="login-form" id="login-form">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <div class="form-error-message">Please enter a valid email address</div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <div class="form-error-message">Password must be at least 8 characters</div>
+          </div>
+
+          <div class="form-options">
+            <div class="remember-me">
+              <input type="checkbox" id="remember" name="remember">
+              <label for="remember">Remember me</label>
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="login-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" x2="3" y1="12" y2="12"/>
+            </svg>
+            <span>Sign In</span>
+          </button>
+        </form>
+
+        <div class="login-divider">
+          <span>or continue with</span>
+        </div>
+
+        <div class="social-login">
+          <button class="social-login-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            <span>GitHub</span>
+          </button>
+          <button class="social-login-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+            <span>Facebook</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in
+      const currentUser = AuthService.getCurrentUser();
+      if (currentUser) {
+        window.location.href = 'index.html'; // Redirect to home if already logged in
+      }
+
+      // Form validation and submission
+      const loginForm = document.getElementById('login-form');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        // Validate email
+        if (!validateEmail(emailInput.value)) {
+          emailInput.parentElement.classList.add('error');
+          isValid = false;
+        } else {
+          emailInput.parentElement.classList.remove('error');
+        }
+
+        // Validate password
+        if (passwordInput.value.length < 8) {
+          passwordInput.parentElement.classList.add('error');
+          isValid = false;
+        } else {
+          passwordInput.parentElement.classList.remove('error');
+        }
+
+        if (isValid) {
+          try {
+            // Show loading state
+            const submitButton = loginForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Signing in...';
+            submitButton.disabled = true;
+
+            // Call the login API
+            const credentials = {
+              email: emailInput.value,
+              password: passwordInput.value
+            };
+
+            const response = await AuthService.login(credentials);
+
+            // Show success message
+            loginForm.innerHTML = '<div style="text-align: center; padding: 2rem;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg><p style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.5rem;">Login successful!</p><p style="color: var(--text-secondary);">Redirecting to your dashboard...</p></div>';
+
+            // Redirect after 2 seconds
+            setTimeout(function() {
+              window.location.href = 'index.html'; // Redirect to home page after successful login
+            }, 2000);
+
+          } catch (error) {
+            // Check if the error is about user not existing
+            if (error.message && (error.message.includes('Invalid password') || error.message.includes('User not found'))) {
+              // Show special error message with signup link
+              const errorDiv = document.createElement('div');
+              errorDiv.className = 'form-error-message';
+              errorDiv.style.display = 'block';
+              errorDiv.style.textAlign = 'center';
+              errorDiv.style.padding = '0.75rem';
+              errorDiv.style.marginTop = '1rem';
+              errorDiv.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+              errorDiv.style.borderRadius = '8px';
+              errorDiv.style.color = 'var(--color-error)';
+              errorDiv.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                User not found. Please sign up first.
+                <div style="margin-top: 0.75rem;">
+                  <a href="signup.html" class="login-button" style="display: inline-block; padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    <span>Sign Up Now</span>
+                  </a>
+                </div>
+              `;
+
+              // Remove any existing error message
+              const existingError = loginForm.querySelector('.form-error-message[style*="display: block"]');
+              if (existingError) {
+                existingError.remove();
+              }
+
+              // Add the error message before the submit button
+              const submitButton = loginForm.querySelector('button[type="submit"]');
+              submitButton.parentNode.insertBefore(errorDiv, submitButton);
+
+              // Reset button
+              submitButton.innerHTML = originalButtonText;
+              submitButton.disabled = false;
+
+              // Redirect to signup page after 3 seconds
+              setTimeout(function() {
+                window.location.href = 'signup.html';
+              }, 3000);
+            } else {
+              // Show regular error message
+              const errorMessage = error.message || 'Login failed. Please try again.';
+              const errorDiv = document.createElement('div');
+              errorDiv.className = 'form-error-message';
+              errorDiv.style.display = 'block';
+              errorDiv.style.textAlign = 'center';
+              errorDiv.style.padding = '0.75rem';
+              errorDiv.style.marginTop = '1rem';
+              errorDiv.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+              errorDiv.style.borderRadius = '8px';
+              errorDiv.style.color = 'var(--color-error)';
+              errorDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> ${errorMessage}`;
+
+              // Remove any existing error message
+              const existingError = loginForm.querySelector('.form-error-message[style*="display: block"]');
+              if (existingError) {
+                existingError.remove();
+              }
+
+              // Add the error message before the submit button
+              const submitButton = loginForm.querySelector('button[type="submit"]');
+              submitButton.parentNode.insertBefore(errorDiv, submitButton);
+
+              // Reset button
+              submitButton.innerHTML = originalButtonText;
+              submitButton.disabled = false;
+            }
+          }
+        }
+      });
+
+      // Email validation function
+      function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+    });
+  </script>
+
+  <style>
+    /* Additional styles */
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    :root {
+      --color-primary: #2ecc71;
+      --color-primary-dark: #27ae60;
+      --color-error: #e74c3c;
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f1f3f5;
+      --bg-input: #ffffff;
+      --bg-hover: #e9ecef;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
+      --border-color: #dee2e6;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-primary: #2ecc71;
+        --color-primary-dark: #27ae60;
+        --color-error: #e74c3c;
+        --bg-primary: #121212;
+        --bg-secondary: #1e1e1e;
+        --bg-tertiary: #2d2d2d;
+        --bg-input: #2d2d2d;
+        --bg-hover: #3d3d3d;
+        --text-primary: #e9ecef;
+        --text-secondary: #adb5bd;
+        --text-muted: #6c757d;
+        --border-color: #444444;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+      }
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+    }
+
+    .icon-primary {
+      stroke: var(--color-primary);
+    }
+  </style>
+  <script src="/js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('login-form');
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          try {
+            const result = await AuthService.login({ email, password });
+            window.location.href = '/index.html';
+          } catch (error) {
+            alert(error.message);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

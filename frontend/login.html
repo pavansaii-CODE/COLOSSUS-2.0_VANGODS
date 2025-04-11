@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    // Redirect to the new login page
+    window.location.href = '/login-new.html';
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NextNear</title>
+    <meta name="description" content="Login to your NextNear account to access your saved properties and bookings.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <!-- <link rel="stylesheet" href="dark-theme.css"> -->
+    <style>
+        /* Login Page Specific Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: stretch;
+            background-color: var(--dark-bg-primary);
+        }
+
+        .auth-image {
+            flex: 1;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .auth-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
+        }
+
+        .auth-image-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .auth-image-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .auth-image-logo .logo-icon {
+            font-size: 30px;
+            color: var(--accent-primary);
+        }
+
+        .auth-image-logo .logo-text {
+            font-size: 30px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .auth-image-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .auth-image-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .auth-testimonials {
+            margin-top: 50px;
+        }
+
+        .testimonial {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .testimonial-author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .testimonial-author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .testimonial-author-name {
+            font-weight: 600;
+        }
+
+        .auth-form-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-form-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(46, 204, 113, 0.05) 0%, transparent 80%),
+                        radial-gradient(circle at 90% 80%, rgba(26, 188, 156, 0.05) 0%, transparent 80%);
+            z-index: 0;
+        }
+
+        .auth-form-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--dark-bg-secondary);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--dark-border);
+        }
+
+        .auth-form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-form-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .auth-form-logo .logo-icon {
+            font-size: 24px;
+            color: var(--accent-primary);
+        }
+
+        .auth-form-logo .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .auth-form-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .auth-form-subtitle {
+            font-size: 16px;
+            color: var(--dark-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-text-secondary);
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--dark-border);
+            background-color: var(--dark-input-bg);
+            color: var(--dark-text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+            outline: none;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-left: 40px;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-text-muted);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-primary);
+        }
+
+        .remember-me label {
+            font-size: 14px;
+            color: var(--dark-text-secondary);
+        }
+
+        .forgot-password {
+            font-size: 14px;
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .auth-form-button {
+            margin-top: 10px;
+            padding: 14px;
+            border-radius: 8px;
+            background: var(--accent-gradient);
+            color: rgb(5, 0, 0);
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .auth-form-button:hover {
+            color: rgb(130, 227, 130);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: var(--dark-text-muted);
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--dark-border);
+        }
+
+        .auth-divider span {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-login-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--dark-bg-tertiary);
+            border: 1px solid var(--dark-border);
+            color: var(--dark-text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-login-button:hover {
+            background-color: var(--dark-hover);
+        }
+
+        .social-login-button i {
+            font-size: 18px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--dark-text-secondary);
+        }
+
+        .auth-footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-decoration {
+            position: absolute;
+            z-index: 0;
+        }
+
+        .auth-decoration-1 {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .auth-decoration-2 {
+            bottom: 10%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(26, 188, 156, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .auth-decoration-3 {
+            top: 50%;
+            right: 20%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        .floating-slow {
+            animation: floating 8s ease-in-out infinite;
+        }
+
+        .floating-slower {
+            animation: floating 10s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(15px, 15px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* Password visibility toggle */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-text-muted);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Form validation */
+        .form-group.error input {
+            border-color: #e74c3c;
+        }
+
+        .form-group .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Back to home button */
+        .back-to-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background-color: var(--dark-bg-tertiary);
+            border-radius: 30px;
+            color: var(--dark-text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-to-home:hover {
+            background-color: var(--dark-hover);
+        }
+
+        /* Responsive styles */
+        @media (min-width: 992px) {
+            .auth-image {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-form-container {
+                padding: 20px;
+            }
+
+            .auth-form-wrapper {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+    <div class="auth-container">
+        <!-- Left side - Image and testimonials -->
+        <div class="auth-image">
+            <div class="auth-image-content">
+                <div class="auth-image-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <span class="logo-text gradient-text">NextNear</span>
+                </div>
+                <h1 class="auth-image-title">Find Your Perfect Space</h1>
+                <p class="auth-image-subtitle">Join thousands of satisfied customers who found their dream properties with NextNear.</p>
+
+                <div class="auth-testimonials">
+                    <div class="testimonial">
+                        <p class="testimonial-text">"NextNear made finding my dream home so easy. The filters helped me narrow down exactly what I was looking for!"</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-author-avatar">
+                                <img src="/placeholder.svg?height=40&width=40" alt="Testimonial author">
+                            </div>
+                            <div>
+                                <div class="testimonial-author-name">Priya Sharma</div>
+                                <div class="testimonial-author-location">Mumbai</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side - Login form -->
+        <div class="auth-form-container">
+            <div class="auth-form-bg"></div>
+
+            <!-- Decorative elements -->
+            <div class="auth-decoration auth-decoration-1 floating"></div>
+            <div class="auth-decoration auth-decoration-2 floating-slow"></div>
+            <div class="auth-decoration auth-decoration-3 floating-slower"></div>
+
+            <a href="index.html" class="back-to-home">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+
+            <div class="auth-form-wrapper">
+                <div class="auth-form-header">
+                    <div class="auth-form-logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <span class="logo-text gradient-text">NextNear</span>
+                    </div>
+                    <h1 class="auth-form-title">Welcome Back</h1>
+                    <p class="auth-form-subtitle">Login to access your account and continue your property journey</p>
+                </div>
+
+                <form class="auth-form" id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="error-message">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            <span class="password-toggle" id="password-toggle">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="error-message">Password must be at least 8 characters</div>
+                    </div>
+
+                    <div class="form-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="auth-form-button">
+                        <span>Login to Your Account</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="social-login">
+                    <button class="social-login-button">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button class="social-login-button">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            const currentUser = AuthService.getCurrentUser();
+            if (currentUser) {
+                window.location.href = 'index.html'; // Redirect to home if already logged in
+            }
+
+            // Password visibility toggle
+            const passwordToggle = document.getElementById('password-toggle');
+            const passwordInput = document.getElementById('password');
+
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+
+                // Toggle icon
+                const icon = passwordToggle.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+
+            // Form validation and submission
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                let isValid = true;
+
+                // Validate email
+                if (!validateEmail(emailInput.value)) {
+                    emailInput.parentElement.parentElement.classList.add('error');
+                    isValid = false;
+                } else {
+                    emailInput.parentElement.parentElement.classList.remove('error');
+                }
+
+                // Validate password
+                if (passwordInput.value.length < 8) {
+                    passwordInput.parentElement.parentElement.classList.add('error');
+                    isValid = false;
+                } else {
+                    passwordInput.parentElement.parentElement.classList.remove('error');
+                }
+
+                if (isValid) {
+                    try {
+                        // Show loading state
+                        const submitButton = loginForm.querySelector('button[type="submit"]');
+                        const originalButtonText = submitButton.innerHTML;
+                        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+                        submitButton.disabled = true;
+
+                        // Call the login API
+                        const credentials = {
+                            email: emailInput.value,
+                            password: passwordInput.value
+                        };
+
+                        const response = await AuthService.login(credentials);
+
+                        // Show success message
+                        loginForm.innerHTML = '<div style="text-align: center;"><i class="fas fa-check-circle" style="font-size: 48px; color: var(--accent-primary); margin-bottom: 20px;"></i><p style="margin-bottom: 20px;">Login successful! Redirecting...</p></div>';
+
+                        // Redirect after 2 seconds
+                        setTimeout(function() {
+                            window.location.href = 'index.html';
+                        }, 2000);
+
+                    } catch (error) {
+                        // Show error message
+                        const errorMessage = error.message || 'Login failed. Please try again.';
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'form-error-message';
+                        errorDiv.style.color = '#e74c3c';
+                        errorDiv.style.padding = '10px';
+                        errorDiv.style.marginTop = '10px';
+                        errorDiv.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+                        errorDiv.style.borderRadius = '5px';
+                        errorDiv.style.textAlign = 'center';
+                        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${errorMessage}`;
+
+                        // Remove any existing error message
+                        const existingError = loginForm.querySelector('.form-error-message');
+                        if (existingError) {
+                            existingError.remove();
+                        }
+
+                        // Add the error message before the submit button
+                        const submitButton = loginForm.querySelector('button[type="submit"]');
+                        submitButton.parentNode.insertBefore(errorDiv, submitButton);
+
+                        // Reset button
+                        submitButton.innerHTML = originalButtonText;
+                        submitButton.disabled = false;
+                    }
+                }
+            });
+
+            // Email validation function
+            function validateEmail(email) {
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+        });
+    </script>
+</body>
+</html>

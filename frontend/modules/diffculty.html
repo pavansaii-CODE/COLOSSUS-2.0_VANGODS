@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Learning</title>
+    <link rel="stylesheet" href="/modules/diffculty.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Learn Sign Language</h1>
+            <p>Start your journey into visual communication</p>
+        </div>
+    </section>
+
+    <!-- Difficulty Selection -->
+    <section class="difficulty-selection">
+        <h2>Choose Your Level</h2>
+        <div class="difficulty-grid">
+            <div class="difficulty-card" data-level="beginner">
+                <div class="level-icon">🌱</div>
+                <h3>Beginner</h3>
+                <p>Perfect for those just starting their sign language journey</p>
+            </div>
+            <div class="difficulty-card" data-level="intermediate">
+                <div class="level-icon">🌿</div>
+                <h3>Intermediate</h3>
+                <p>For learners who know the basics and want to expand their skills</p>
+            </div>
+            <div class="difficulty-card" data-level="advanced">
+                <div class="level-icon">🌳</div>
+                <h3>Advanced</h3>
+                <p>Master complex conversations and expressions</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section id="modules-section" class="modules-section hidden">
+        <h2>Learning Modules</h2>
+        <div class="modules-grid">
+            <div class="module-card" data-module="alphabet">
+                <img src="https://images.unsplash.com/photo-1632951634308-d6b1895d3662?auto=format&fit=crop&q=80" alt="Alphabet">
+                <h3>Alphabet</h3>
+                <p>Learn to sign the ABC's</p>
+            </div>
+            <div class="module-card" data-module="numbers">
+                <img src="https://images.unsplash.com/photo-1632951634308-d6b1895d3662?auto=format&fit=crop&q=80" alt="Numbers">
+                <h3>Numbers</h3>
+                <p>Master numbers and counting</p>
+            </div>
+            <div class="module-card" data-module="greetings">
+                <img src="https://images.unsplash.com/photo-1632951634308-d6b1895d3662?auto=format&fit=crop&q=80" alt="Greetings">
+                <h3>Greetings</h3>
+                <p>Common phrases and greetings</p>
+            </div>
+            <div class="module-card" data-module="emotions">
+                <img src="https://images.unsplash.com/photo-1632951634308-d6b1895d3662?auto=format&fit=crop&q=80" alt="Emotions">
+                <h3>Emotions</h3>
+                <p>Express feelings and emotions</p>
+            </div>
+            <div class="module-card" data-module="colors">
+                <img src="https://images.unsplash.com/photo-1632951634308-d6b1895d3662?auto=format&fit=crop&q=80" alt="Colors">
+                <h3>Colors</h3>
+                <p>Learn to sign different colors</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Content Section -->
+    <section id="content-section" class="content-section hidden">
+        <div class="content-header">
+            <button id="back-button" class="back-button">← Back to Modules</button>
+            <h2 id="content-title"></h2>
+        </div>
+        <div id="content-grid" class="content-grid">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 Sign Language Learning. All rights reserved.</p>
+    </footer>
+
+    <script src="/modules/diffculty.js"></script>
+</body>
+</html>

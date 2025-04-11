@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SignLearn - Interactive Sign Language Learning Platform</title>
+  <meta name="description" content="Learn sign language through immersive 3D lessons, real-time practice, and interactive quizzes.">
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+          <path d="m1 5 2-2m-2 2 2 2"/>
+          <path d="M5 1 3 3m2-2L3 3"/>
+          <path d="m17 5 2-2m-2 2 2 2"/>
+          <path d="M21 1 19 3m2-2-2 2"/>
+          <path d="M9 11v6"/>
+          <path d="M9 17h6"/>
+          <path d="M11 11h4"/>
+          <path d="M11 14h4"/>
+          <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+          <path d="M3 10v4"/>
+          <path d="M21 10v4"/>
+        </svg>
+        <span class="logo-text">SignLearn</span>
+      </div>
+      <div class="nav-links">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">Classes</a>
+        <a href="#" class="nav-link">Modules</a>
+        <a href="#" class="nav-link">Quizzes</a>
+        <a href="#" class="nav-link">Notes</a>
+        <a href="#" class="nav-link">Dashboard</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login-new.html" class="btn btn-outline">Sign In</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        <button class="sidebar-trigger" id="sidebarTrigger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <line x1="9" x2="9" y1="3" y2="21"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+            <path d="m1 5 2-2m-2 2 2 2"/>
+            <path d="M5 1 3 3m2-2L3 3"/>
+            <path d="m17 5 2-2m-2 2 2 2"/>
+            <path d="M21 1 19 3m2-2-2 2"/>
+            <path d="M9 11v6"/>
+            <path d="M9 17h6"/>
+            <path d="M11 11h4"/>
+            <path d="M11 14h4"/>
+            <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+            <path d="M3 10v4"/>
+            <path d="M21 10v4"/>
+          </svg>
+          <span class="logo-text">SignLearn</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/>
+            <path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="sidebar-body">
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Navigation</div>
+          <ul class="sidebar-menu">
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Home</span>
+              </a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <path d="M22 9.5V8a2 2 0 0 0-2-2h-6.5"/>
+                  <path d="M4 11.5v1a2 2 0 0 0 2 2h6.5"/>
+                  <path d="M8 5h6a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                  <path d="M8 15h6a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"/>
+                </svg>
+                <span>Classes</span>
+              </a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                </svg>
+                <span>Modules</span>
+              </a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span>Quizzes</span>
+              </a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                  <line x1="9" x2="9" y1="3" y2="21"/>
+                </svg>
+                <span>Notes</span>
+              </a>
+            </li>
+            <li class="sidebar-menu-item">
+              <a href="#" class="sidebar-menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                  <rect width="7" height="9" x="3" y="3" rx="1"/>
+                  <rect width="7" height="5" x="14" y="3" rx="1"/>
+                  <rect width="7" height="9" x="14" y="12" rx="1"/>
+                  <rect width="7" height="5" x="3" y="16" rx="1"/>
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <ul class="sidebar-menu">
+          <li class="sidebar-menu-item">
+            <a href="#" class="sidebar-menu-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <h1 class="hero-title">Learn Sign Language <span class="text-primary">Interactively</span></h1>
+          <p class="hero-description">
+            Master sign language through immersive 3D lessons, real-time practice, and interactive quizzes.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="M15 8h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-3"/>
+                <path d="M6 8h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H6"/>
+                <line x1="2" x2="22" y1="12" y2="12"/>
+                <line x1="6" x2="18" y1="16" y2="16"/>
+                <line x1="10" x2="14" y1="20" y2="20"/>
+              </svg>
+              Start Learning
+            </button>
+            <button class="btn btn-outline btn-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/>
+                <line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+                <path d="M8 14h.01"/>
+                <path d="M12 14h.01"/>
+                <path d="M16 14h.01"/>
+                <path d="M8 18h.01"/>
+                <path d="M12 18h.01"/>
+                <path d="M16 18h.01"/>
+              </svg>
+              Book a Class
+            </button>
+          </div>
+        </div>
+        <div class="hero-3d-container">
+          <div id="hero3DCanvas"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Everything You Need to Master Sign Language</h2>
+          <p class="section-description">
+            Our platform combines technology and education to make learning sign language accessible and engaging
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M22 9.5V8a2 2 0 0 0-2-2h-6.5"/>
+                <path d="M4 11.5v1a2 2 0 0 0 2 2h6.5"/>
+                <path d="M8 5h6a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                <path d="M8 15h6a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Interactive Classes</h3>
+            <p class="feature-description">Learn from expert instructors in live interactive sessions</p>
+          </div>
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Comprehensive Modules</h3>
+            <p class="feature-description">Structured learning paths from beginner to advanced levels</p>
+          </div>
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Adaptive Quizzes</h3>
+            <p class="feature-description">Test your knowledge with personalized quizzes</p>
+          </div>
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" x2="12" y1="19" y2="22"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Real-time Conversion</h3>
+            <p class="feature-description">Practice with our AI-powered sign language converter</p>
+          </div>
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Community Support</h3>
+            <p class="feature-description">Connect with other learners and native signers</p>
+          </div>
+          <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <rect width="7" height="9" x="3" y="3" rx="1"/>
+                <rect width="7" height="5" x="14" y="3" rx="1"/>
+                <rect width="7" height="9" x="14" y="12" rx="1"/>
+                <rect width="7" height="5" x="3" y="16" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Progress Dashboard</h3>
+            <p class="feature-description">Track your learning journey with detailed analytics</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">The Impact of Sign Language Learning</h2>
+          <p class="section-description">
+            Learning sign language creates a more inclusive world with far-reaching benefits
+          </p>
+        </div>
+        <div class="benefits-grid">
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="benefit-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3 class="benefit-title">Empowerment for Deaf Users</h3>
+            <p class="benefit-description">
+              Providing tools and resources that enable deaf individuals to communicate effectively and independently
+            </p>
+          </div>
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="benefit-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+            </div>
+            <h3 class="benefit-title">Inclusivity in Education & Healthcare</h3>
+            <p class="benefit-description">
+              Breaking down barriers in critical sectors to ensure equal access to education and healthcare services
+            </p>
+          </div>
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="benefit-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <path d="m1 5 2-2m-2 2 2 2"/>
+                <path d="M5 1 3 3m2-2L3 3"/>
+                <path d="m17 5 2-2m-2 2 2 2"/>
+                <path d="M21 1 19 3m2-2-2 2"/>
+                <path d="M9 11v6"/>
+                <path d="M9 17h6"/>
+                <path d="M11 11h4"/>
+                <path d="M11 14h4"/>
+                <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+                <path d="M3 10v4"/>
+                <path d="M21 10v4"/>
+              </svg>
+            </div>
+            <h3 class="benefit-title">Social Integration</h3>
+            <p class="benefit-description">
+              Fostering meaningful connections between deaf and hearing communities through shared language
+            </p>
+          </div>
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="benefit-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" x2="22" y1="12" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h3 class="benefit-title">Global Accessibility</h3>
+            <p class="benefit-description">
+              Supporting multiple sign languages to connect signers across different cultures and regions
+            </p>
+          </div>
+          <div class="benefit-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="benefit-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+                <line x1="9" x2="15" y1="18" y2="18"/>
+                <line x1="10" x2="14" y1="22" y2="22"/>
+                <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+              </svg>
+            </div>
+            <h3 class="benefit-title">Workplace Diversity</h3>
+            <p class="benefit-description">
+              Enabling organizations to build more inclusive workplaces by improving communication with deaf colleagues
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Preview Section -->
+    <section class="dashboard-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Track Your Learning Journey</h2>
+          <p class="section-description">
+            Our comprehensive dashboard helps you monitor progress and stay motivated
+          </p>
+        </div>
+        <div class="tabs">
+
+          <div class="tabs-list">
+            <button class="tab-trigger active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-trigger" data-tab="quizzes">Quizzes</button>
+            <button class="tab-trigger" data-tab="classes">Classes</button>
+            <button class="tab-trigger" data-tab="modules">Modules</button>
+          </div>
+          <div class="tabs-content">
+            <div class="tab-panel active" id="dashboard-panel">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Your Learning Dashboard</h3>
+                  <p class="card-description">Track your progress and achievements</p>
+                </div>
+                <div class="card-content">
+                  <div class="dashboard-stats">
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <h4 class="stat-title">Completion Rate</h4>
+                      </div>
+                      <div class="stat-content">
+                        <div class="stat-value">78%</div>
+                        <p class="stat-change">+12% from last month</p>
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <h4 class="stat-title">Practice Streak</h4>
+                      </div>
+                      <div class="stat-content">
+                        <div class="stat-value">14 days</div>
+                        <p class="stat-change">Keep it up!</p>
+                        <div class="streak-dots">
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                          <div class="streak-dot active"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-header">
+                        <h4 class="stat-title">Vocabulary</h4>
+                      </div>
+                      <div class="stat-content">
+                        <div class="stat-value">243 signs</div>
+                        <p class="stat-change">+28 this week</p>
+                        <div class="vocab-grid">
+                          <div class="vocab-day">1</div>
+                          <div class="vocab-day">2</div>
+                          <div class="vocab-day">3</div>
+                          <div class="vocab-day">4</div>
+                          <div class="vocab-day">5</div>
+                          <div class="vocab-day">6</div>
+                          <div class="vocab-day">7</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel" id="quizzes-panel">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Your Quiz Performance</h3>
+                  <p class="card-description">Track your quiz scores and progress</p>
+                </div>
+                <div class="card-content">
+                  <div class="quiz-list">
+                    <div class="quiz-item">
+                      <div class="quiz-info">
+                        <h4 class="quiz-name">Alphabet Basics</h4>
+                        <p class="quiz-date">Last attempt: 2 days ago</p>
+                      </div>
+                      <div class="quiz-score">
+                        <div class="score-value">85%</div>
+                        <button class="btn btn-sm btn-outline">Retry</button>
+                      </div>
+                    </div>
+                    <div class="quiz-item">
+                      <div class="quiz-info">
+                        <h4 class="quiz-name">Common Phrases</h4>
+                        <p class="quiz-date">Last attempt: 3 days ago</p>
+                      </div>
+                      <div class="quiz-score">
+                        <div class="score-value">90%</div>
+                        <button class="btn btn-sm btn-outline">Retry</button>
+                      </div>
+                    </div>
+                    <div class="quiz-item">
+                      <div class="quiz-info">
+                        <h4 class="quiz-name">Numbers & Counting</h4>
+                        <p class="quiz-date">Last attempt: 4 days ago</p>
+                      </div>
+                      <div class="quiz-score">
+                        <div class="score-value">95%</div>
+                        <button class="btn btn-sm btn-outline">Retry</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel" id="classes-panel">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Upcoming Classes</h3>
+                  <p class="card-description">Your scheduled live sessions</p>
+                </div>
+                <div class="card-content">
+                  <div class="class-list">
+                    <div class="class-item">
+                      <div class="class-info">
+                        <h4 class="class-name">Conversational Sign Language</h4>
+                        <p class="class-date">Tomorrow at 10:00 AM</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Join</button>
+                    </div>
+                    <div class="class-item">
+                      <div class="class-info">
+                        <h4 class="class-name">Medical Terminology</h4>
+                        <p class="class-date">In 2 days at 11:00 AM</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Join</button>
+                    </div>
+                    <div class="class-item">
+                      <div class="class-info">
+                        <h4 class="class-name">Professional Workplace Signs</h4>
+                        <p class="class-date">In 3 days at 12:00 PM</p>
+                      </div>
+                      <button class="btn btn-sm btn-primary">Join</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-panel" id="modules-panel">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Learning Modules</h3>
+                  <p class="card-description">Your current and upcoming modules</p>
+                </div>
+                <div class="card-content">
+                  <div class="module-list">
+                    <div class="module-item">
+                      <div class="module-header">
+                        <h4 class="module-name">Beginner Basics</h4>
+                        <span class="module-badge in-progress">In Progress</span>
+                      </div>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                      </div>
+                      <div class="module-stats">
+                        <span>65% Complete</span>
+                        <span>10 Lessons</span>
+                      </div>
+                    </div>
+                    <div class="module-item">
+                      <div class="module-header">
+                        <h4 class="module-name">Everyday Conversations</h4>
+                        <span class="module-badge up-next">Up Next</span>
+                      </div>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10%"></div>
+                      </div>
+                      <div class="module-stats">
+                        <span>10% Complete</span>
+                        <span>7 Lessons</span>
+                      </div>
+                    </div>
+                    <div class="module-item">
+                      <div class="module-header">
+                        <h4 class="module-name">Advanced Expressions</h4>
+                        <span class="module-badge upcoming">Upcoming</span>
+                      </div>
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                      </div>
+                      <div class="module-stats">
+                        <span>0% Complete</span>
+                        <span>4 Lessons</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conversion Demo Section -->
+    <section class="conversion-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Real-time Sign Language Conversion</h2>
+          <p class="section-description">
+            Practice your signs and get instant feedback with our AI-powered converter
+          </p>
+        </div>
+        <div class="conversion-demo">
+          <div class="card">
+            <div class="card-content">
+              <div class="conversion-video">
+                <div id="conversionStatus" class="conversion-status"></div>
+                <div class="conversion-placeholder" id="conversionPlaceholder">
+                  <p id="conversionResult">Your camera feed will appear here</p>
+                  <button class="btn btn-primary" id="startSigningBtn">Start Signing</button>
+                </div>
+              </div>
+              <div class="conversion-info">
+                <h3>How it works:</h3>
+                <ol class="conversion-steps">
+                  <li>Position yourself in front of the camera</li>
+                  <li>Click "Start Signing" to begin</li>
+                  <li>Perform sign language gestures clearly</li>
+                  <li>Our AI will convert your signs to text in real-time</li>
+                  <li>Practice and improve with instant feedback</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Start Your Sign Language Journey Today</h2>
+        <p class="cta-description">
+          Join thousands of learners worldwide who are breaking communication barriers and building a more inclusive world
+        </p>
+        <div class="cta-actions">
+          <a href="signup.html" class="btn btn-secondary btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <path d="M15 8h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-3"/>
+              <path d="M6 8h3a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H6"/>
+              <line x1="2" x2="22" y1="12" y2="12"/>
+              <line x1="6" x2="18" y1="16" y2="16"/>
+              <line x1="10" x2="14" y1="20" y2="20"/>
+            </svg>
+            Get Started Free
+          </a>
+          <a href="login-new.html" class="btn btn-outline-light btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" x2="16" y1="2" y2="6"/>
+              <line x1="8" x2="8" y1="2" y2="6"/>
+              <line x1="3" x2="21" y1="10" y2="10"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M16 14h.01"/>
+              <path d="M8 18h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M16 18h.01"/>
+            </svg>
+            Book a Demo
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+              <path d="m1 5 2-2m-2 2 2 2"/>
+              <path d="M5 1 3 3m2-2L3 3"/>
+              <path d="m17 5 2-2m-2 2 2 2"/>
+              <path d="M21 1 19 3m2-2-2 2"/>
+              <path d="M9 11v6"/>
+              <path d="M9 17h6"/>
+              <path d="M11 11h4"/>
+              <path d="M11 14h4"/>
+              <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+              <path d="M3 10v4"/>
+              <path d="M21 10v4"/>
+            </svg>
+            <span class="logo-text">SignLearn</span>
+          </div>
+          <p class="footer-tagline">
+            Breaking communication barriers through interactive sign language education.
+          </p>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-title">Platform</h3>
+          <ul class="footer-menu">
+            <li><a href="#" class="footer-link">Classes</a></li>
+            <li><a href="#" class="footer-link">Modules</a></li>
+            <li><a href="#" class="footer-link">Quizzes</a></li>
+            <li><a href="#" class="footer-link">Notes</a></li>
+            <li><a href="#" class="footer-link">Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-title">Company</h3>
+          <ul class="footer-menu">
+            <li><a href="#" class="footer-link">About Us</a></li>
+            <li><a href="#" class="footer-link">Careers</a></li>
+            <li><a href="#" class="footer-link">Blog</a></li>
+            <li><a href="#" class="footer-link">Press</a></li>
+            <li><a href="#" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h3 class="footer-title">Legal</h3>
+          <ul class="footer-menu">
+            <li><a href="#" class="footer-link">Terms of Service</a></li>
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+            <li><a href="#" class="footer-link">Cookie Policy</a></li>
+            <li><a href="#" class="footer-link">Accessibility</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© <span id="currentYear"></span> SignLearn. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
