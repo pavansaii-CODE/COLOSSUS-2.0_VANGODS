@@ -1,103 +1,94 @@
-
 const signExamples = [
-   
-    // Numbers 0-9
     {
-        number: "0",
+        digit: "0",
         instructions: [
-            "Hand Shape: Create an O shape with your fingers and thumb.",
-            "Positioning: Keep your palm facing outward."
+            "Hand Shape: Form a circle with all your fingers touching at the tips."
         ],
-        category: "numbers",
-        image: "images/img_O.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_O.jpg"
     },
     {
-        number: "1",
+        digit: "1",
         instructions: [
-            "Hand Shape: Extend your index finger upward.",
-            "Positioning: Keep your other fingers curled into your palm."
+            "Hand Shape: Raise your index finger.",
+            "Keep other fingers curled into your palm."
         ],
-        category: "numbers",
-        image: "images/img_1.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_1.jpg"
     },
     {
-        number: "2",
+        digit: "2",
         instructions: [
-            "Hand Shape: Extend your index and middle fingers upward.",
-            "Positioning: Keep the remaining fingers curled into your palm."
+            "Hand Shape: Raise your index and middle fingers.",
+            "Keep other fingers curled."
         ],
-        category: "numbers",
-        image: "images/img_2.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_2.jpg"
     },
     {
-        number: "3",
+        digit: "3",
         instructions: [
-            "Hand Shape: Extend your thumb, index finger, and middle finger upward.",
-            "Positioning: Keep your ring and pinky fingers curled into your palm."
+            "Hand Shape: Raise your thumb, index, and middle fingers.",
+            "Curl your ring and pinky fingers."
         ],
-        category: "numbers",
-        image: "images/img_3.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_3.jpg"
     },
     {
-        number: "4",
+        digit: "4",
         instructions: [
-            "Hand Shape: Extend your index, middle, ring, and pinky fingers upward.",
-            "Positioning: Keep your thumb tucked against your palm."
+            "Hand Shape: Raise all fingers except the thumb."
         ],
-        category: "numbers",
-        image: "images/img_4.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_4.jpg"
     },
     {
-        number: "5",
+        digit: "5",
         instructions: [
-            "Hand Shape: Spread all five fingers upward.",
-            "Positioning: Keep your palm facing outward."
+            "Hand Shape: Raise all five fingers and spread them slightly."
         ],
-        category: "numbers",
-        image: "images/img_5.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_5.jpg"
     },
     {
-        number: "6",
+        digit: "6",
         instructions: [
-            "Hand Shape: Touch your thumb to your pinky finger.",
-            "Positioning: Keep the remaining three fingers extended upward."
+            "Hand Shape: Touch your pinky to your thumb.",
+            "Extend the other three fingers."
         ],
-        category: "numbers",
-        image: "images/img_6.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_6.jpg"
     },
     {
-        number: "7",
+        digit: "7",
         instructions: [
-            "Hand Shape: Touch your thumb to your ring finger.",
-            "Positioning: Keep the other fingers extended upward."
+            "Hand Shape: Touch your ring finger to your thumb.",
+            "Extend the other three fingers."
         ],
-        category: "numbers",
-        image: "images/img_7.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_7.jpg"
     },
     {
-        number: "8",
+        digit: "8",
         instructions: [
-            "Hand Shape: Touch your thumb to your middle finger.",
-            "Positioning: Keep the other fingers extended upward."
+            "Hand Shape: Touch your middle finger to your thumb.",
+            "Extend the other three fingers."
         ],
-        category: "numbers",
-        image: "images/img_8.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_8.jpg"
     },
     {
-        number: "9",
+        digit: "9",
         instructions: [
-            "Hand Shape: Touch your thumb to your index finger.",
-            "Positioning: Keep the remaining three fingers extended upward."
+            "Hand Shape: Touch your index finger to your thumb.",
+            "Extend the other three fingers."
         ],
-        category: "numbers",
-        image: "images/img_9.jpg" // Add the image URL if available
+        category: "number",
+        image: "images/img_9.jpg"
     }
 ];
 
-
-
-
-
+// Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
@@ -119,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedCategory = categoryFilter.value;
 
         const filteredExamples = signExamples.filter(example => {
-            const matchesSearch = example.alphabet.toLowerCase().includes(searchTerm);
+            const matchesSearch = example.digit.toLowerCase().includes(searchTerm);
             const matchesCategory = !selectedCategory || example.category === selectedCategory;
             return matchesSearch && matchesCategory;
         });
@@ -143,12 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.innerHTML = `
                     <div class="sign-header" onclick="toggleExample(this)">
                         <div class="sign-title">
-                            <h2>${example.alphabet}</h2>
+                            <h2>${example.digit}</h2>
                         </div>
                         <span class="category-tag">${example.category}</span>
                     </div>
                     <div class="sign-content">
-                        <img src="${example.image || 'placeholder.png'}" alt="${example.alphabet} sign" class="sign-image">
+                        <img src="${example.image || 'placeholder.png'}" alt="${example.digit} sign" class="sign-image">
                         <h3 class="instructions-title">Instructions:</h3>
                         <ol class="instructions-list">
                             ${example.instructions.map(instruction => `<li>${instruction}</li>`).join('')}
