@@ -72,7 +72,7 @@ var videos = [
         description: "Understanding the grammar structure of American Sign Language.",
         category: "basics",
         thumbnail: "https://placehold.co/600x400/3b82f6/ffffff?text=ASL+Grammar",
-        videoUrl: "https://example.com/videos/asl-grammar.mp4",
+        videoUrl:  "https://www.youtube.com/embed/i520LPUkpYc" ,
         duration: "14:10"
     },
     {
