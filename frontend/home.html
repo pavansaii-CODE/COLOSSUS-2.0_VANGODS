@@ -9,12 +9,21 @@
   <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet" href="/css/sparkles-background.css">
   <link rel="stylesheet" href="/css/auth.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/background-beams.css">
+  <link rel="stylesheet" href="/css/about-footer.css">
+  <link rel="stylesheet" href="/css/features.css">
+  <link rel="stylesheet" href="/css/global-beams.css">
+  <link rel="stylesheet" href="/css/navbar-dark.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
+  <!-- Global Beam Elements -->
+  <div class="global-beam-1"></div>
+  <div class="global-beam-2"></div>
+  <div class="global-beam-3"></div>
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container navbar-container">
@@ -40,12 +49,17 @@
         <a href="/sign-recognition" class="nav-link">Practice</a>
         <a href="#features" class="nav-link">Features</a>
         <a href="#about" class="nav-link">About</a>
+        <!-- Links only visible to authenticated users -->
+        <a href="/progress" class="nav-link nav-user-link hidden">My Progress</a>
+        <a href="/favorites" class="nav-link nav-user-link hidden">Favorites</a>
+        <!-- Admin-only link -->
+        <a href="/admin" class="nav-link admin-only hidden">Admin</a>
       </div>
       <div class="nav-actions">
         <!-- Auth buttons for guests -->
         <div class="auth-buttons">
-          <a href="/login-new.html" class="btn btn-outline">Sign In</a>
-          <a href="/signup.html" class="btn btn-primary">Sign Up</a>
+          <a href="/login-new.html" class="btn btn-outline nav-auth-link">Sign In</a>
+          <a href="/signup.html" class="btn btn-primary nav-auth-link">Sign Up</a>
         </div>
 
         <!-- User menu for authenticated users -->
@@ -58,9 +72,9 @@
               </svg>
             </button>
             <div class="user-dropdown-content">
-              <a href="/dashboard">Dashboard</a>
-              <a href="/profile">Profile</a>
-              <a href="#" class="logout-button">Logout</a>
+              <a href="/dashboard" class="nav-user-link">Dashboard</a>
+              <a href="/profile" class="nav-user-link">Profile</a>
+              <a href="#" class="logout-button nav-user-link">Logout</a>
             </div>
           </div>
         </div>
@@ -74,24 +88,40 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
+  <!-- Hero Section with Background Beams -->
+  <section class="background-beams-container">
+    <div class="background-beams"></div>
+
     <div class="container hero-container">
-      <div class="hero-content">
-        <h1 class="hero-title">Learn Sign Language Interactively</h1>
-        <p class="hero-description">Master sign language through our immersive 3D lessons, real-time practice with AI feedback, and interactive quizzes.</p>
+      <div class="gradient-text-container">
+        <h1 class="gradient-title">Learn Sign Language Interactively</h1>
+
+        <div class="gradient-highlight">
+          <div class="gradient-highlight-bg">
+            <span>Break communication barriers</span>
+          </div>
+          <div class="gradient-highlight-text">
+            <span>Break communication barriers</span>
+          </div>
+        </div>
+
+        <p class="hero-description">Master sign language through our immersive  real-time practice with AI feedback, and interactive quizzes.</p>
         <div class="hero-actions">
           <a href="/signup.html" class="btn btn-primary btn-lg">Get Started</a>
-          <a href="#features" class="btn btn-outline btn-lg">Learn More</a>
+          <a href="#features" class="btn btn-outline btn-lg btn-outline-light">Learn More</a>
         </div>
       </div>
+
       <div class="hero-image">
         <img src="/images/hero-image.png" alt="Person using sign language" class="hero-img">
       </div>
     </div>
+
+    <!-- Add a subtle hint to click anywhere for the beam effect -->
+    <div class="click-hint">Click anywhere to interact with the beams</div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Enhanced Features Section -->
   <section class="features" id="features">
     <div class="container">
       <div class="section-header">
@@ -107,18 +137,9 @@
             </svg>
           </div>
           <h3 class="feature-title">Comprehensive Curriculum</h3>
-          <p class="feature-description">Our structured learning path takes you from beginner to advanced with carefully designed modules.</p>
+          <p class="feature-description">Our structured learning path takes you from beginner to advanced with carefully designed modules that build on each other.</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-              <path d="m9 12 2 2 4-4"/>
-            </svg>
-          </div>
-          <h3 class="feature-title">Interactive 3D Models</h3>
-          <p class="feature-description">Learn with detailed 3D hand models that you can rotate and examine from any angle.</p>
-        </div>
+
         <div class="feature-card">
           <div class="feature-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -128,8 +149,9 @@
             </svg>
           </div>
           <h3 class="feature-title">Real-time Practice</h3>
-          <p class="feature-description">Practice your signs with our AI-powered recognition system that provides instant feedback.</p>
+          <p class="feature-description">Practice your signs with our AI-powered recognition system that provides instant feedback on your hand movements and positioning.</p>
         </div>
+
         <div class="feature-card">
           <div class="feature-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -140,13 +162,38 @@
             </svg>
           </div>
           <h3 class="feature-title">Progress Tracking</h3>
-          <p class="feature-description">Track your learning journey with detailed progress reports and achievement badges.</p>
+          <p class="feature-description">Track your learning journey with detailed progress reports, achievement badges, and personalized recommendations.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">AI-Generated Quizzes</h3>
+          <p class="feature-description">Test your knowledge with personalized quizzes generated by our Gemini AI system, tailored to your learning progress.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Community Learning</h3>
+          <p class="feature-description">Connect with other learners, join virtual practice sessions, and participate in community challenges to enhance your skills.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- About Section with Gradient Styling -->
   <section class="about" id="about">
     <div class="container">
       <div class="section-header">
@@ -160,6 +207,20 @@
         <div class="about-text">
           <p>SignLearn was founded with a simple goal: to break down communication barriers between the hearing and deaf communities. Our team of linguists, educators, and technology experts have created a platform that makes learning sign language engaging, effective, and accessible.</p>
           <p>We believe that language should never be a barrier to connection and understanding. By empowering more people to learn sign language, we're working toward a more inclusive world where everyone can communicate freely.</p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <div class="stat-number">10,000+</div>
+              <div class="stat-label">Active Learners</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">500+</div>
+              <div class="stat-label">Sign Lessons</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">95%</div>
+              <div class="stat-label">Satisfaction Rate</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -192,71 +253,90 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Footer with Gradient Styling -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <div class="footer-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
-            <path d="m1 5 2-2m-2 2 2 2"/>
-            <path d="M5 1 3 3m2-2L3 3"/>
-            <path d="m17 5 2-2m-2 2 2 2"/>
-            <path d="M21 1 19 3m2-2-2 2"/>
-            <path d="M9 11v6"/>
-            <path d="M9 17h6"/>
-            <path d="M11 11h4"/>
-            <path d="M11 14h4"/>
-            <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
-            <path d="M3 10v4"/>
-            <path d="M21 10v4"/>
-          </svg>
-          <span class="logo-text">SignLearn</span>
+        <div class="footer-info">
+          <div class="footer-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+              <path d="m1 5 2-2m-2 2 2 2"/>
+              <path d="M5 1 3 3m2-2L3 3"/>
+              <path d="m17 5 2-2m-2 2 2 2"/>
+              <path d="M21 1 19 3m2-2-2 2"/>
+              <path d="M9 11v6"/>
+              <path d="M9 17h6"/>
+              <path d="M11 11h4"/>
+              <path d="M11 14h4"/>
+              <path d="M3 14v3a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-3"/>
+              <path d="M3 10v4"/>
+              <path d="M21 10v4"/>
+            </svg>
+            <span class="logo-text">SignLearn</span>
+          </div>
+          <p class="footer-tagline">Breaking communication barriers through interactive sign language education.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+              </svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+              </svg>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>
+              </svg>
+            </a>
+          </div>
         </div>
+
         <div class="footer-links">
           <div class="footer-links-column">
             <h3 class="footer-links-title">Platform</h3>
-            <a href="#" class="footer-link">Features</a>
-            <a href="#" class="footer-link">Pricing</a>
-            <a href="#" class="footer-link">FAQ</a>
+            <a href="#features" class="footer-link">Features</a>
+            <a href="/modules/diffculty.html" class="footer-link">Modules</a>
+            <a href="/quiz" class="footer-link">Quizzes</a>
+            <a href="/sign-recognition" class="footer-link">Practice</a>
           </div>
           <div class="footer-links-column">
             <h3 class="footer-links-title">Company</h3>
-            <a href="#" class="footer-link">About Us</a>
+            <a href="#about" class="footer-link">About Us</a>
             <a href="#" class="footer-link">Careers</a>
             <a href="#" class="footer-link">Blog</a>
+            <a href="#contact" class="footer-link">Contact</a>
           </div>
           <div class="footer-links-column">
             <h3 class="footer-links-title">Legal</h3>
             <a href="#" class="footer-link">Terms of Service</a>
             <a href="#" class="footer-link">Privacy Policy</a>
             <a href="#" class="footer-link">Cookie Policy</a>
+            <a href="#" class="footer-link">Accessibility</a>
           </div>
         </div>
       </div>
+
       <div class="footer-bottom">
-        <p class="copyright">© 2023 SignLearn. All rights reserved.</p>
-        <div class="social-links">
-          <a href="#" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-            </svg>
-          </a>
-          <a href="#" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-            </svg>
-          </a>
-          <a href="#" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
-            </svg>
-          </a>
-        </div>
+        <p>&copy; <span id="currentYear">2025</span> SignLearn. All rights reserved.</p>
       </div>
     </div>
   </footer>
+
+  <script>
+    // Update copyright year
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
 
   <!-- Mobile Sidebar -->
   <div class="sidebar" id="sidebar">
@@ -317,5 +397,9 @@
   <script src="/js/auth-ui.js"></script>
   <script src="/js/home.js"></script>
   <script src="/js/sparkles-background.js"></script>
+  <script src="/js/background-beams.js"></script>
+  <script src="/js/features-animation.js"></script>
+  <script src="/js/global-beams.js"></script>
+  <!-- <script src="/js/test-auth.js"></script> -->
 </body>
 </html>

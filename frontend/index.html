@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SignLearn - Interactive Sign Language Learning Platform</title>
   <meta name="description" content="Learn sign language through immersive 3D lessons, real-time practice, and interactive quizzes.">
-  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="./css/in.css">
   <link rel="stylesheet" href="/css/sparkles-background.css">
   <link rel="stylesheet" href="/css/auth.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -42,10 +42,10 @@
         <span class="logo-text">SignLearn</span>
       </div>
       <div class="nav-links">
-        <a href="/" class="nav-link active">Home</a>
+        <a href="#" class="nav-link active">Home</a>
         <a href="/modules/diffculty.html" class="nav-link">Modules</a>
         <a href="/sign-recognition" class="nav-link">Practice</a>
-        <a href="#" class="nav-link">Quizzes</a>
+        <a href="quiz.html" class="nav-link">Quizzes</a>
         <a href="#" class="nav-link">Dashboard</a>
       </div>
       <div class="nav-actions">
@@ -67,7 +67,7 @@
             <div class="user-dropdown-content">
               <a href="/dashboard">Dashboard</a>
               <a href="/profile">Profile</a>
-              <a href="#" class="logout-button">Logout</a>
+              <a href="/" class="logout-button">Logout</a>
             </div>
           </div>
         </div>
@@ -187,7 +187,7 @@
     <section class="hero-section">
       <div class="container hero-container">
         <div class="hero-content">
-          <h1 class="hero-title">Learn Sign Language <span class="text-primary">Interactively</span></h1>
+          <h1 class="hero-title" id="xn">Learn Sign Language <span class="text-primary">Interactively</span></h1>
           <p class="hero-description">
             Master sign language through immersive 3D lessons, real-time practice, and interactive quizzes.
           </p>
@@ -475,6 +475,15 @@
                 </div>
                 <div class="card-content">
                   <div class="quiz-list">
+                    <div class="quiz-item featured-quiz">
+                      <div class="quiz-info">
+                        <h4 class="quiz-name">AI-Generated Quizzes</h4>
+                        <p class="quiz-date">NEW! Personalized quizzes created by AI</p>
+                      </div>
+                      <div class="quiz-score">
+                        <a href="/quiz" class="btn btn-sm btn-primary">Try Now</a>
+                      </div>
+                    </div>
                     <div class="quiz-item">
                       <div class="quiz-info">
                         <h4 class="quiz-name">Alphabet Basics</h4>
@@ -506,6 +515,13 @@
                       </div>
                     </div>
                   </div>
+                  <style>
+                    .featured-quiz {
+                      background-color: #f0f7ff;
+                      border-left: 3px solid #4361ee;
+                      padding-left: 15px;
+                    }
+                  </style>
                 </div>
               </div>
             </div>

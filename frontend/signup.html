@@ -683,7 +683,7 @@
                     try {
                         const result = await AuthService.register({ name, email, password });
                         console.log('Registration successful:', result.message);
-                        window.location.href = '/';
+                        window.location.href = '/index.html';
                     } catch (error) {
                         console.error('Registration error:', error);
                         showError(error.message || 'Registration failed. Please try again.');

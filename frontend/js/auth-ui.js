@@ -1,10 +1,11 @@
 // Authentication UI handler
 document.addEventListener('DOMContentLoaded', function() {
   // Update UI based on authentication state
-  function updateAuthUI() {
+  // Expose this function globally so it can be called from other scripts
+  window.updateAuthUI = function updateAuthUI() {
     const isAuthenticated = AuthService.isAuthenticated();
     const currentUser = AuthService.getCurrentUser();
-    
+
     // Get all auth-related elements
     const authButtons = document.querySelectorAll('.auth-buttons');
     const userMenus = document.querySelectorAll('.user-menu');
@@ -12,29 +13,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const authRequiredElements = document.querySelectorAll('.auth-required');
     const guestOnlyElements = document.querySelectorAll('.guest-only');
     const adminOnlyElements = document.querySelectorAll('.admin-only');
-    
+
+    // Get navbar-specific elements
+    const navAuthLinks = document.querySelectorAll('.nav-auth-link');
+    const navUserLinks = document.querySelectorAll('.nav-user-link');
+
+    console.log('Auth state updated:', isAuthenticated ? 'Logged in' : 'Logged out');
+
     if (isAuthenticated && currentUser) {
       // User is logged in
-      
+
       // Show user menu, hide auth buttons
       authButtons.forEach(el => el.classList.add('hidden'));
       userMenus.forEach(el => el.classList.remove('hidden'));
-      
+
       // Update user name in UI
       userNameElements.forEach(el => {
-        el.textContent = currentUser.name;
+        el.textContent = currentUser.name || 'User';
       });
-      
+
       // Show auth-required elements
       authRequiredElements.forEach(el => {
         el.classList.remove('hidden');
       });
-      
+
       // Hide guest-only elements
       guestOnlyElements.forEach(el => {
         el.classList.add('hidden');
       });
-      
+
+      // Update navbar links
+      navAuthLinks.forEach(el => el.classList.add('hidden'));
+      navUserLinks.forEach(el => el.classList.remove('hidden'));
+
       // Show/hide admin elements based on role
       adminOnlyElements.forEach(el => {
         if (currentUser.role === 'admin') {
@@ -45,28 +56,32 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     } else {
       // User is not logged in
-      
+
       // Hide user menu, show auth buttons
       authButtons.forEach(el => el.classList.remove('hidden'));
       userMenus.forEach(el => el.classList.add('hidden'));
-      
+
       // Hide auth-required elements
       authRequiredElements.forEach(el => {
         el.classList.add('hidden');
       });
-      
+
       // Show guest-only elements
       guestOnlyElements.forEach(el => {
         el.classList.remove('hidden');
       });
-      
+
+      // Update navbar links
+      navAuthLinks.forEach(el => el.classList.remove('hidden'));
+      navUserLinks.forEach(el => el.classList.add('hidden'));
+
       // Hide admin elements
       adminOnlyElements.forEach(el => {
         el.classList.add('hidden');
       });
     }
   }
-  
+
   // Handle logout button clicks
   const logoutButtons = document.querySelectorAll('.logout-button');
   logoutButtons.forEach(button => {
@@ -74,19 +89,19 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       AuthService.logout();
       updateAuthUI();
-      
+
       // Redirect to home page after logout
-      window.location.href = '/';
+      window.location.href = '/home.html';
     });
   });
-  
+
   // Check authentication on page load
   async function checkAuth() {
     try {
       // If we have a token, verify it and update user data
       if (AuthService.isAuthenticated()) {
         const isValid = await AuthService.verifyToken();
-        
+
         if (isValid) {
           // Token is valid, fetch latest user data
           await AuthService.fetchCurrentUser();
@@ -104,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
       updateAuthUI();
     }
   }
-  
+
   // Initialize
   checkAuth();
 });

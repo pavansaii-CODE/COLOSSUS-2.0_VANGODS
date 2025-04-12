@@ -1,0 +1,318 @@
+/* Background Beams with Collision Effect */
+.background-beams-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  padding: 4rem 0;
+  margin-bottom: 0;
+  position: relative;
+}
+
+/* Add a gradient overlay at the bottom for smooth transition */
+.background-beams-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to top, white, transparent);
+  z-index: 5;
+}
+
+/* Dark mode support for the transition */
+@media (prefers-color-scheme: dark) {
+  .background-beams-container::after {
+    background: linear-gradient(to top, #111827, transparent);
+  }
+}
+
+/* Ensure the hero container works with the background beams */
+.background-beams-container .hero-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+.background-beams-container .hero-description {
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 600px;
+  margin: 1.5rem auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.background-beams-container .hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.background-beams-container .hero-image {
+  margin-top: 2rem;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(120, 58, 180, 0.3));
+}
+
+.background-beams-container .hero-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.background-beams {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.6;
+  filter: blur(10px);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+}
+
+.background-beams::before,
+.background-beams::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(79, 70, 229, 0.6) 0%, transparent 70%);
+  animation: beam-movement 15s infinite linear;
+}
+
+.background-beams::after {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
+  animation: beam-movement-alt 20s infinite linear;
+}
+
+@keyframes beam-movement {
+  0% {
+    top: 0%;
+    left: 10%;
+    opacity: 0.7;
+  }
+  25% {
+    top: 30%;
+    left: 80%;
+    opacity: 0.9;
+  }
+  50% {
+    top: 80%;
+    left: 60%;
+    opacity: 0.7;
+  }
+  75% {
+    top: 50%;
+    left: 20%;
+    opacity: 0.9;
+  }
+  100% {
+    top: 0%;
+    left: 10%;
+    opacity: 0.7;
+  }
+}
+
+@keyframes beam-movement-alt {
+  0% {
+    top: 80%;
+    left: 80%;
+    opacity: 0.7;
+  }
+  25% {
+    top: 40%;
+    left: 10%;
+    opacity: 0.9;
+  }
+  50% {
+    top: 10%;
+    left: 40%;
+    opacity: 0.7;
+  }
+  75% {
+    top: 60%;
+    left: 70%;
+    opacity: 0.9;
+  }
+  100% {
+    top: 80%;
+    left: 80%;
+    opacity: 0.7;
+  }
+}
+
+/* Collision effect - particles that appear on click */
+.beam-particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(167, 139, 250, 0.9) 0%, transparent 70%);
+  animation: particle-explosion 1s forwards ease-out;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+}
+
+@keyframes particle-explosion {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(20);
+    opacity: 0;
+  }
+}
+
+/* Gradient text styling */
+.gradient-text-container {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  padding: 2rem;
+  color: white;
+}
+
+.gradient-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.5px;
+}
+
+.gradient-highlight {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.gradient-highlight-bg {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #4f46e5, #8b5cf6, #a855f7);
+  padding: 0.5rem 0;
+  text-shadow: none;
+}
+
+.gradient-highlight-text {
+  position: relative;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #4f46e5, #8b5cf6, #a855f7);
+  padding: 0.5rem 0;
+  text-shadow: none;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .gradient-title {
+    color: #fff;
+  }
+}
+
+/* Click hint */
+.click-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 20;
+  animation: pulse 2s infinite;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Button styles for dark background */
+.background-beams-container .btn-outline {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: white;
+}
+
+.background-beams-container .btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.background-beams-container .btn-primary {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.background-beams-container .btn-primary:hover {
+  background-color: #4338ca;
+  border-color: #4338ca;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .gradient-title {
+    font-size: 2.5rem;
+  }
+
+  .gradient-highlight {
+    font-size: 1.5rem;
+  }
+
+  .background-beams-container {
+    padding: 2rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .gradient-title {
+    font-size: 2rem;
+  }
+
+  .gradient-highlight {
+    font-size: 1.2rem;
+  }
+
+  .click-hint {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}

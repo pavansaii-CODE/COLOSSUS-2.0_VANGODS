@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - SignLearn</title>
+  <meta name="description" content="Your personal dashboard for tracking progress in sign language learning.">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/sparkles-background.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary, #000);
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background-color: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .stat-title {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary, #000);
+    }
+
+    .stat-change {
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .positive {
+      color: #10b981;
+    }
+
+    .negative {
+      color: #ef4444;
+    }
+
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .content-card {
+      background-color: white;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary, #000);
+    }
+
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .progress-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .progress-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background-color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .progress-details {
+      flex: 1;
+    }
+
+    .progress-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .progress-bar-container {
+      height: 0.5rem;
+      background-color: #e5e7eb;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: #3b82f6;
+      border-radius: 1rem;
+    }
+
+    .upcoming-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .upcoming-item {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .upcoming-item:last-child {
+      border-bottom: none;
+    }
+
+    .upcoming-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      background-color: #f3f4f6;
+      border-radius: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .date-day {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .date-month {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .upcoming-details {
+      flex: 1;
+    }
+
+    .upcoming-title {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .upcoming-time {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      .stat-card, .content-card {
+        background-color: #1f2937;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        border-bottom-color: #374151;
+      }
+
+      .progress-icon, .upcoming-date {
+        background-color: #374151;
+      }
+
+      .progress-bar-container {
+        background-color: #374151;
+      }
+
+      .upcoming-item {
+        border-bottom-color: #374151;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-primary">
+          <path d="m1 5 2-2m-2 2 2 2"/>
+          <path d="m5 1 2 2m-2-2 2 2"/>
+          <path d="M9 6V3m0 3L6 3h6L9 6Z"/>
+          <path d="m9 6 3 3m-3-3 3-3m-3 6v10"/>
+          <path d="m9 12 3 3m-3-3 3-3"/>
+        </svg>
+        <a href="/" class="logo-text">SignLearn</a>
+      </div>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/modules/diffculty.html" class="nav-link">Modules</a>
+        <a href="/sign-recognition" class="nav-link">Practice</a>
+        <a href="/dashboard" class="nav-link active">Dashboard</a>
+      </div>
+      <div class="nav-actions">
+        <!-- User menu for authenticated users -->
+        <div class="user-menu">
+          <div class="user-dropdown">
+            <button class="user-dropdown-button">
+              <span class="user-name">User</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="user-dropdown-content">
+              <a href="/dashboard">Dashboard</a>
+              <a href="/profile">Profile</a>
+              <a href="#" class="logout-button">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="dashboard-container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Dashboard</h1>
+      <div class="auth-required">Welcome, <span class="user-name">User</span>!</div>
+    </div>
+
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-title">Total Practice Time</div>
+        <div class="stat-value">12.5 hours</div>
+        <div class="stat-change positive">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m18 15-6-6-6 6"/>
+          </svg>
+          <span>+2.3 hours this week</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Signs Learned</div>
+        <div class="stat-value">48</div>
+        <div class="stat-change positive">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m18 15-6-6-6 6"/>
+          </svg>
+          <span>+5 this week</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Accuracy Rate</div>
+        <div class="stat-value">87%</div>
+        <div class="stat-change positive">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m18 15-6-6-6 6"/>
+          </svg>
+          <span>+2% improvement</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Streak</div>
+        <div class="stat-value">7 days</div>
+        <div class="stat-change">
+          <span>Keep it up!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Your Progress</h2>
+          <a href="#" class="btn btn-outline btn-sm">View All</a>
+        </div>
+
+        <div class="progress-list">
+          <div class="progress-item">
+            <div class="progress-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="progress-details">
+              <div class="progress-title">Alphabet Module</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div>100%</div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="progress-details">
+              <div class="progress-title">Numbers Module</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 75%;"></div>
+              </div>
+            </div>
+            <div>75%</div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="progress-details">
+              <div class="progress-title">Common Phrases</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 45%;"></div>
+              </div>
+            </div>
+            <div>45%</div>
+          </div>
+
+          <div class="progress-item">
+            <div class="progress-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="progress-details">
+              <div class="progress-title">Conversation Basics</div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 20%;"></div>
+              </div>
+            </div>
+            <div>20%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Upcoming Lessons</h2>
+          <a href="#" class="btn btn-outline btn-sm">View All</a>
+        </div>
+
+        <div class="upcoming-list">
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="date-day">15</div>
+              <div class="date-month">Jun</div>
+            </div>
+            <div class="upcoming-details">
+              <div class="upcoming-title">Numbers Advanced</div>
+              <div class="upcoming-time">10:00 AM - 11:00 AM</div>
+            </div>
+          </div>
+
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="date-day">18</div>
+              <div class="date-month">Jun</div>
+            </div>
+            <div class="upcoming-details">
+              <div class="upcoming-title">Common Phrases Practice</div>
+              <div class="upcoming-time">2:00 PM - 3:00 PM</div>
+            </div>
+          </div>
+
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <div class="date-day">22</div>
+              <div class="date-month">Jun</div>
+            </div>
+            <div class="upcoming-details">
+              <div class="upcoming-title">Conversation Basics</div>
+              <div class="upcoming-time">11:00 AM - 12:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-section">
+        <h3>SignLearn</h3>
+        <p>Interactive sign language learning platform with 3D visualization and real-time feedback.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/modules/diffculty.html">Modules</a></li>
+          <li><a href="/sign-recognition">Practice</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email: info@signlearn.com</p>
+        <p>Phone: +1 (555) 123-4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2024 SignLearn. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth-ui.js"></script>
+  <script src="/js/sparkles-background.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is authenticated
+      if (!AuthService.isAuthenticated()) {
+        // Redirect to login page if not authenticated
+        window.location.href = '/login-new.html?redirect=/index.html';
+        return;
+      }
+
+      // Load user data
+      const currentUser = AuthService.getCurrentUser();
+      if (currentUser) {
+        // Update user name in UI
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(el => {
+          el.textContent = currentUser.name;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

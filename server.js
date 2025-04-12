@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Home page route
 app.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'home.html'));
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 // Dashboard route (protected page after login)
@@ -60,6 +60,11 @@ app.get('/dashboard', (req, res) => {
 // Sign recognition page route
 app.get('/sign-recognition', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'sign_recognition.html'));
+});
+
+// Quiz page route
+app.get('/quiz', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'quiz.html'));
 });
 
 // Redirect old login page to new login page
